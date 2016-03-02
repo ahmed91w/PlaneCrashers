@@ -13,7 +13,7 @@ import jetGame.StartingClass;
  */
 public class Avion {
 
-    final int MOVESPEED = 5;
+    final int MOVESPEED = 1;
 
     private int centerX = 600; //coordonnées
     private int centerY = 540; //coordonnées

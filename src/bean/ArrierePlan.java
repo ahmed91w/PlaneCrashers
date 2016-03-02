@@ -5,14 +5,15 @@
  */
 package bean;
 
+import java.awt.Image;
+
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  */
 public class ArrierePlan {
-
     private int bgX, bgY;
-    private int vitesseY;//vitesse de defilement
+    private int vitesseY=1;//vitesse de defilement
 
     public ArrierePlan(int x, int y) {
         this.bgX = x;
@@ -21,9 +22,9 @@ public class ArrierePlan {
     }
 
     public void update() {
-        bgX += vitesseY;
-        if (bgX <= -2160) {
-            bgX += 4320;
+        bgY -= vitesseY;
+        if (bgY <= -2489) {
+            bgY += (2489*2);
         }
     }
 
@@ -50,6 +51,5 @@ public class ArrierePlan {
     public void setVitesseY(int vitesseY) {
         this.vitesseY = vitesseY;
     }
-    
-    
+
 }
