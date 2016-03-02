@@ -9,6 +9,7 @@ import bean.ArrierePlan;
 import bean.Avion;
 import java.applet.Applet;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -48,13 +49,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
     public void init() {
+       
         setSize(1340, 650);
         setBackground(Color.BLACK);
-
         setFocusable(true);
         addKeyListener(this);
         Frame frame = (Frame) this.getParent().getParent();
         frame.setTitle("JetPlan By Ahmed WAFDI and Anas SAOUDI");
+        frame.setResizable(false);
 
         character = getImage(getCodeBase(), "mini-plan1.png");
         planMoved = getImage(getCodeBase(), "mini-plan1-onMove.png");
@@ -169,7 +171,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
         g.drawImage(character, avion.getCenterX(), avion.getCenterY(), this);
         g.drawImage(avionActuel, avion.getCenterX() , avion.getCenterY(), this);
-
+        
 
     }
 
