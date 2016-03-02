@@ -9,6 +9,7 @@ import bean.ArrierePlan;
 import bean.Avion;
 import java.applet.Applet;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -29,18 +30,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
     public void destroy() {
-
     }
 
     @Override
     public void stop() {
-
     }
 
     @Override
     public void start() {
-        bg1 = new ArrierePlan(0, 0);
-        bg2 = new ArrierePlan(1366, 0);
+        bg1 = new ArrierePlan(0, 2000);
+        bg2 = new ArrierePlan(0, -2000);
         avion = new Avion();
         Thread thread = new Thread(this);
         thread.start();
@@ -50,16 +49,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public void init() {
         setSize(1340, 650);
         setBackground(Color.BLACK);
-
         setFocusable(true);
         addKeyListener(this);
         Frame frame = (Frame) this.getParent().getParent();
         frame.setTitle("JetPlan By Ahmed WAFDI and Anas SAOUDI");
 
-        character = getImage(getCodeBase(), "mini-plan1.png");
-        planMoved = getImage(getCodeBase(), "mini-plan1-onMove.png");
+        character = getImage(getCodeBase(), "res/mini-plan1.png");
+        planMoved = getImage(getCodeBase(), "res/mini-plan1-onMove.png");
         avionActuel = character;
-        background = getImage(getCodeBase(), "warshipsBackground.jpg");
+        background = getImage(getCodeBase(), "res/warshipsBackground.jpg");
 
     }
 
@@ -95,21 +93,25 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             case KeyEvent.VK_UP:
                 avionActuel = planMoved;
                 avion.up();
+                repaint();
                 System.out.println("Avancer Pressed " + e.getKeyCode());
                 break;
             case KeyEvent.VK_DOWN:
                 avion.down();
                 avionActuel = planMoved;
+                repaint();
                 System.out.println("Reculer Pressed " + e.getKeyCode());
                 break;
             case KeyEvent.VK_LEFT:
                 avion.moveLeft();
                 avionActuel = planMoved;
+                repaint();
                 System.out.println("vol droite Pressed " + e.getKeyCode());
                 break;
             case KeyEvent.VK_RIGHT:
                 avion.moveRight();
                 avionActuel = planMoved;
+                repaint();
                 System.out.println("vol gauche Pressed" + e.getKeyCode());
                 break;
             case KeyEvent.VK_SPACE:
@@ -168,8 +170,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
         g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
         g.drawImage(character, avion.getCenterX(), avion.getCenterY(), this);
-        g.drawImage(avionActuel, avion.getCenterX() , avion.getCenterY(), this);
-
 
     }
 
