@@ -12,19 +12,20 @@ import java.awt.Image;
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  */
 public class ArrierePlan {
+
     private int bgX, bgY;
-    private int vitesseY=1;//vitesse de defilement
+    private int vitesseY;//vitesse de defilement
 
     public ArrierePlan(int x, int y) {
         this.bgX = x;
         this.bgY = y;
-        this.vitesseY = 0;
+        this.vitesseY =-1;
     }
 
     public void update() {
         bgY -= vitesseY;
-        if (bgY <= -2489) {
-            bgY += (2489*2);
+        if (bgY >= 1750) {
+            bgY = -(2 * 1450);
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package bean;
 
+import java.util.ArrayList;
 import jetGame.StartingClass;
 
 /**
@@ -17,11 +18,13 @@ public class Avion {
 
     private int centerX = 600; //coordonnées
     private int centerY = 540; //coordonnées
-
+    private boolean hasMessile=true;
     private static int vie = 3;
 
     private int vitesseX = 0;
     private int vitesseY = 0;
+
+    private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
     private boolean movingUp = false;
     private boolean movingDown = false;
@@ -56,21 +59,27 @@ public class Avion {
 
     }
 
+    public void shoot() {
+        Projectile p = new Projectile(centerX + 24, centerY - 10);
+        projectiles.add(p);
+
+    }
+
     public void up() {
-        vitesseY = -2;
+        vitesseY = -6;
     }
 
     public void down() {
-        vitesseY = 2;
+        vitesseY = 6;
     }
 
     public void moveRight() {
-        vitesseX = 2;
+        vitesseX = 6;
 
     }
 
     public void moveLeft() {
-        vitesseX = -2;
+        vitesseX = -6;
     }
 
     public void stopUP() {
@@ -154,4 +163,17 @@ public class Avion {
         this.movingDown = movingDown;
     }
 
+    public ArrayList<Projectile> getProjectiles() {
+        return projectiles;
+    }
+
+    public boolean isHasMessile() {
+        return hasMessile;
+    }
+
+    public void setHasMessile(boolean hasMessile) {
+        this.hasMessile = hasMessile;
+    }
+
+    
 }
