@@ -29,9 +29,9 @@ public class Projectile {
 
     public void update() {
         y -= vitesseY;
-//        if (x > 800) {
-//            visible = false;
-//        }
+        if (y < 0) {
+            visible = false;
+        }
 
     }
 

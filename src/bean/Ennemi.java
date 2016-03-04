@@ -5,6 +5,7 @@
  */
 package bean;
 
+import java.util.Random;
 import jetGame.StartingClass;
 
 /**
@@ -17,10 +18,13 @@ public class Ennemi {
 
     private ArrierePlan bg = StartingClass.getBg1();
 
-    
+    private boolean detruit = false;
+
     public void update() {
+       
         centerY -= vitesseY;
-        vitesseY = bg.getVitesseY()-1;
+        vitesseY = bg.getVitesseY() - 1;
+
     }
 
     public int getMaxHealth() {
@@ -79,5 +83,18 @@ public class Ennemi {
         this.vitesseY = vitesseY;
     }
 
-    
+    public boolean destroy() {
+        return true;
+    }
+
+    public boolean isDetruit() {
+        return detruit;
+    }
+
+    public void setDetruit(boolean detruit) {
+        this.detruit = detruit;
+    }
+
+
+
 }

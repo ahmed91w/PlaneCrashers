@@ -5,6 +5,7 @@
  */
 package bean;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import jetGame.StartingClass;
 
@@ -18,7 +19,7 @@ public class Avion {
 
     private int centerX = 600; //coordonnées
     private int centerY = 540; //coordonnées
-    private boolean hasMessile=true;
+    private boolean hasMessile = true;
     private static int vie = 3;
 
     private int vitesseX = 0;
@@ -31,6 +32,8 @@ public class Avion {
 
     private static ArrierePlan bg1 = StartingClass.getBg1();
     private static ArrierePlan bg2 = StartingClass.getBg2();
+
+    private static Rectangle collusion=new Rectangle(0, 0, 0, 0);
 
     public void update() {
 
@@ -62,6 +65,18 @@ public class Avion {
     public void shoot() {
         Projectile p = new Projectile(centerX + 24, centerY - 10);
         projectiles.add(p);
+
+    }
+
+    public void removeShoot() {
+        for (int i = 0; i < projectiles.size(); i++) {
+            if (projectiles.get(i).getY() <= 0) {
+                System.out.println("Suppression du projectile a y=" + projectiles.get(i).getY());
+                projectiles.remove(i);
+
+            }
+
+        }
 
     }
 
@@ -175,5 +190,4 @@ public class Avion {
         this.hasMessile = hasMessile;
     }
 
-    
 }
