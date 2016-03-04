@@ -12,7 +12,7 @@ import jetGame.StartingClass;
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  */
-public class Ennemi {
+public class Ennemi extends Thread {
 
     private int maxHealth, currentHealth, power, vitesseY, centerX, centerY;
 
@@ -21,9 +21,9 @@ public class Ennemi {
     private boolean detruit = false;
 
     public void update() {
-       
+
         centerY -= vitesseY;
-        vitesseY = bg.getVitesseY() - 1;
+        vitesseY = - 3;
 
     }
 
@@ -83,7 +83,7 @@ public class Ennemi {
         this.vitesseY = vitesseY;
     }
 
-    public boolean destroy() {
+    public boolean destroyTis() {
         return true;
     }
 
@@ -94,7 +94,5 @@ public class Ennemi {
     public void setDetruit(boolean detruit) {
         this.detruit = detruit;
     }
-
-
 
 }

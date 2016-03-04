@@ -18,11 +18,10 @@ import java.awt.event.KeyListener;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Label;
-import static java.lang.Float.max;
-import static java.lang.Float.min;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,8 +38,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     private static ArrierePlan bg1, bg2;
     private Graphics second;
     private ScoreBoard board;
-    private AvionEnnemi a;
-    public static List<AvionEnnemi> avionEnnemis = new ArrayList<>();
+    private Thread thread1;
 
     @Override
     public void destroy() {
@@ -60,33 +58,20 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
         Thread thread = new Thread(this);
 
+        thread1.start();
         thread.start();
-
+//lancer les threads ici
     }
 
     @Override
     public void init() {
+        //initialisation se fait ici
         setSize(1340, 650);
         setBackground(Color.BLACK);
         setFocusable(true);
         addKeyListener(this);
         Frame frame = (Frame) this.getParent().getParent();
-        frame.setTitle("JetPlan By Ahmed WAFDI and Anas SAOUDI");
         frame.setResizable(false);
-        Label player = new Label("Joueur : Ahmed");
-        Label score = new Label("Score : " + 1000);
-
-        player.setFocusable(true);
-        player.setLocation(20, 80);
-        player.setBackground(Color.gray);
-        player.setForeground(Color.red);
-        score.setFocusable(true);
-        score.setLocation(20, 80);
-        score.setBackground(Color.gray);
-        score.setForeground(Color.red);
-        add(player);
-        add(score);
-
         character = getImage(getCodeBase(), "res/mini-plan1.png");
         avionMoved = getImage(getCodeBase(), "res/mini-plan1-onMove.png");
         vie1 = getImage(getCodeBase(), "res/nbr-vie.png");
@@ -96,16 +81,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         ennemie = getImage(getCodeBase(), "res/ennemi-mini.png");
         planMovedLeft = getImage(getCodeBase(), "res/moveLeft.png");
         planMovedRight = getImage(getCodeBase(), "res/moveRight.PNG");
-//        explode = getImage(getCodeBase(), "res/explod.gif");
+        explode = getImage(getCodeBase(), "res/explod.gif");
         avionActuel = character;
         background = getImage(getCodeBase(), "res/warshipsBackground-Récupéré.jpg");
-
+        ennemi = new AvionEnnemi(0, 0);
+        thread1 = new Thread(ennemi);
     }
 
     @Override
     public void run() {
         while (avion.getVie() != 0) {
-
+//les modifications des x,y se fait ici;
             avion.update();
             if (avion.isMovingUp()) {
                 avionActuel = avionMoved;
@@ -126,12 +112,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 }
             }
 
+            for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {
+                ennemi.getAvionEnnemis().get(i).update();
+            }
             bg1.update();
             bg2.update();
 
             repaint();
             try {
-                Thread.sleep(17);
+                Thread.sleep(15);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -174,7 +163,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             case KeyEvent.VK_SPACE:
                 avion.shoot();
                 avion.removeShoot();
-
                 System.out.println("SPACE Fire button Pressed " + e.getKeyCode());
                 break;
 
@@ -238,8 +226,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         g.drawImage(vie1, 50, 570, this);
         g.drawImage(vie2, 90, 570, this);
         g.drawImage(vie3, 130, 570, this);
-//        g.drawImage(ennemie, ennemi1.getCenterX(), ennemi1.getCenterY(), this);
 
+//affichage des projectiles
         ArrayList projectiles = avion.getProjectiles();
         for (int i = 0; i < projectiles.size(); i++) {
             Projectile p = (Projectile) projectiles.get(i);
@@ -250,13 +238,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             }
 
         }
-
-//        for (int i = 0; i < avionEnnemis.size(); i++) {
-//            if (avionEnnemis.get(i).isDetruit() == false) {
-//                g.drawImage(ennemie, avionEnnemis.get(i).getCenterX(), avionEnnemis.get(i).getCenterY(), this);
-//            }
-//
-//        }
+//affichage des ennemis
+        for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {
+            g.drawImage(ennemie, ennemi.getAvionEnnemis().get(i).getCenterX(), ennemi.getAvionEnnemis().get(i).getCenterY(), this);
+        }
     }
 
     public static ArrierePlan getBg1() {

@@ -5,7 +5,10 @@
  */
 package bean;
 
-import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,7 +22,7 @@ public class ArrierePlan {
     public ArrierePlan(int x, int y) {
         this.bgX = x;
         this.bgY = y;
-        this.vitesseY =-1;
+        this.vitesseY = -1;
     }
 
     public void update() {

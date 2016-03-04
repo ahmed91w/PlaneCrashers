@@ -10,5 +10,6 @@ package bean;
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  */
 public class BossEnnemi {
-    
+
+    private int maxHealth, currentHealth, power;
 }

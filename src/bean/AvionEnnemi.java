@@ -5,16 +5,17 @@
  */
 package bean;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import jetGame.StartingClass;
 
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  */
-public class AvionEnnemi extends Ennemi {
+public class AvionEnnemi extends Ennemi implements Runnable {
 
-    Thread t;
+    private List<AvionEnnemi> avionEnnemis = new ArrayList<>();
 
     public AvionEnnemi(int x, int y) {
         this.setCenterX(x);
@@ -22,11 +23,31 @@ public class AvionEnnemi extends Ennemi {
 
     }
 
-    public AvionEnnemi newEnnemi() {
+    public static AvionEnnemi newEnnemi() {
         Random random = new Random();
         random.nextInt(1200);
         AvionEnnemi ae = new AvionEnnemi(random.nextInt(1200), 0);
         return ae;
+    }
+
+    public List<AvionEnnemi> getAvionEnnemis() {
+        return avionEnnemis;
+    }
+
+    public void setAvionEnnemis(List<AvionEnnemi> avionEnnemis) {
+        this.avionEnnemis = avionEnnemis;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            avionEnnemis.add(AvionEnnemi.newEnnemi());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
 }
