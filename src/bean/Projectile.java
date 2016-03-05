@@ -23,13 +23,23 @@ public class Projectile {
     public Projectile(int x, int y) {
         this.x = x;
         this.y = y;
-        vitesseY = 7;
+        vitesseY = 1;
         visible = true;
     }
 
     public void update() {
+        vitesseY = 7;
         y -= vitesseY;
         if (y < 0) {
+            visible = false;
+        }
+
+    }
+
+    public void updateProjectileEnnemi() {
+        vitesseY = 3;
+        y += vitesseY;
+        if (y > 700) {
             visible = false;
         }
 

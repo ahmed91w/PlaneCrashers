@@ -8,6 +8,7 @@ package jetGame;
 import bean.ArrierePlan;
 import bean.Avion;
 import bean.AvionEnnemi;
+import bean.BossEnnemi;
 import bean.Projectile;
 import bean.ScoreBoard;
 import java.applet.Applet;
@@ -17,7 +18,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Label;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,16 +29,20 @@ import java.util.logging.Logger;
  */
 public class StartingClass extends Applet implements Runnable, KeyListener {
 
-    private Avion avion;
+    public static Avion avion;
     private AvionEnnemi ennemi;
     private Image image, character, background, avionMoved, avionActuel, vie1, vie2, vie3, ennemie, explode;
     private Image planMovedLeft;
     private Image planMovedRight;
-    private Image vide;
+    private Image boss;
+
+//    private Image vide, exp1, exp2, exp3, exp4;
     private static ArrierePlan bg1, bg2;
     private Graphics second;
     private ScoreBoard board;
-    private Thread thread1;
+    private Thread ajoutEnnemis;
+    private Thread shootBoss;
+    private BossEnnemi bossEnnemi;
 
     @Override
     public void destroy() {
@@ -46,21 +50,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
     public void stop() {
-    }
-
-    @Override
-    public void start() {
-        bg1 = new ArrierePlan(0, -1750);
-        bg2 = new ArrierePlan(0, -4200);
-        avion = new Avion();
-
-        board = new ScoreBoard();
-
-        Thread thread = new Thread(this);
-
-        thread1.start();
-        thread.start();
-//lancer les threads ici
     }
 
     @Override
@@ -81,17 +70,44 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         ennemie = getImage(getCodeBase(), "res/ennemi-mini.png");
         planMovedLeft = getImage(getCodeBase(), "res/moveLeft.png");
         planMovedRight = getImage(getCodeBase(), "res/moveRight.PNG");
-        explode = getImage(getCodeBase(), "res/explod.gif");
+
+        boss = getImage(getCodeBase(), "res/Boss B-3.mini.png");
+//        bossEnnemi.setImage(vie1);
+//        exp2 = getImage(getCodeBase(), "res/explode2.png");
+//        exp3 = getImage(getCodeBase(), "res/explode3.png");
+//        exp4 = getImage(getCodeBase(), "res/explode14.png");
         avionActuel = character;
         background = getImage(getCodeBase(), "res/warshipsBackground-Récupéré.jpg");
         ennemi = new AvionEnnemi(0, 0);
-        thread1 = new Thread(ennemi);
+        ajoutEnnemis = new Thread(ennemi);
+
+//        Projectile p=new Projectile(bossEnnemi.getCenterX()+25, bossEnnemi.getCenterY()+25);
+//        bossEnnemi.getProjectiles().add(p);
+    }
+
+    @Override
+    public void start() {
+        bg1 = new ArrierePlan(0, -1750);
+        bg2 = new ArrierePlan(0, -4200);
+        avion = new Avion();
+
+        board = new ScoreBoard();
+
+        Thread thread = new Thread(this);
+        bossEnnemi = new BossEnnemi();
+        shootBoss = new Thread(bossEnnemi);
+        thread.start();
+        ajoutEnnemis.start();
+        shootBoss.start();
+
+//lancer les threads ici
     }
 
     @Override
     public void run() {
         while (avion.getVie() != 0) {
 //les modifications des x,y se fait ici;
+
             avion.update();
             if (avion.isMovingUp()) {
                 avionActuel = avionMoved;
@@ -105,18 +121,29 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             for (int i = 0; i < projectiles.size(); i++) {
                 Projectile p = (Projectile) projectiles.get(i);
                 if (p.isVisible() == true) {
-                    System.out.println("updating shoot");
+                    System.out.println("updating shoot Avion");
                     p.update();
                 } else {
                     projectiles.remove(i);
                 }
             }
+            System.out.println(" >>>>>>>>>>>>>>>> " + BossEnnemi.projectiles.size());
+            for (int i = 0; i < BossEnnemi.projectiles.size(); i++) {
 
+                if (BossEnnemi.projectiles.get(i).isVisible() == true) {
+                    System.out.println("updating shoot Boss");
+                    BossEnnemi.projectiles.get(i).updateProjectileEnnemi();
+                }
+            }
+
+            //mis a jour deplacement AvionEnnemi
             for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {
                 ennemi.getAvionEnnemis().get(i).update();
             }
+
             bg1.update();
             bg2.update();
+            bossEnnemi.update();
 
             repaint();
             try {
@@ -194,8 +221,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 System.out.println("Arrête de bouger à droite " + e.getKeyCode());
                 break;
             case KeyEvent.VK_SPACE:
-
-                System.out.println("avion Projectil supprimer");
                 System.out.println(" SPACE Fire button Released" + e.getKeyCode());
                 break;
 
@@ -222,10 +247,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public void paint(Graphics g) {
         g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
         g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
-        g.drawImage(avionActuel, avion.getCenterX(), avion.getCenterY(), this);
+
         g.drawImage(vie1, 50, 570, this);
         g.drawImage(vie2, 90, 570, this);
         g.drawImage(vie3, 130, 570, this);
+
+//affichage des ennemis
+        for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {
+            g.drawImage(ennemie, ennemi.getAvionEnnemis().get(i).getCenterX(), ennemi.getAvionEnnemis().get(i).getCenterY(), this);
+        }
 
 //affichage des projectiles
         ArrayList projectiles = avion.getProjectiles();
@@ -238,10 +268,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             }
 
         }
-//affichage des ennemis
-        for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {
-            g.drawImage(ennemie, ennemi.getAvionEnnemis().get(i).getCenterX(), ennemi.getAvionEnnemis().get(i).getCenterY(), this);
+        g.drawImage(boss, bossEnnemi.getCenterX(), bossEnnemi.getCenterY(), this);
+        for (int i = 0; i < BossEnnemi.projectiles.size(); i++) {
+
+            if (BossEnnemi.projectiles.get(i).isVisible() == true) {
+                System.out.println("drawing shoot Boss");
+                g.drawImage(getImage(getCodeBase(), "res/tiremal.png"), BossEnnemi.projectiles.get(i).getX(), BossEnnemi.projectiles.get(i).getY(), this);
+            }
         }
+
+        g.drawImage(avionActuel, avion.getCenterX(), avion.getCenterY(), this);
     }
 
     public static ArrierePlan getBg1() {

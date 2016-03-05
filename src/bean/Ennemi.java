@@ -5,50 +5,68 @@
  */
 package bean;
 
-import java.util.Random;
+import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 import jetGame.StartingClass;
 
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  */
-public class Ennemi extends Thread {
+public class Ennemi {
 
-    private int maxHealth, currentHealth, power, vitesseY, centerX, centerY;
+    private int vitesseY, vitesseX, centerX, centerY;
 
     private ArrierePlan bg = StartingClass.getBg1();
 
+    private List<Projectile> projectiles = new ArrayList<>();
+
     private boolean detruit = false;
+
+    private Image image;
+    private Avion avion = StartingClass.avion;
 
     public void update() {
 
         centerY -= vitesseY;
         vitesseY = - 3;
+        if (vitesseX > 0) {
+            if (this.getCenterX() < 1200) {
+                this.setCenterX(this.getCenterX() + vitesseX);
+
+            }
+
+        } else if (vitesseX < 0) {
+            if (this.getCenterX() > 20) {
+                this.setCenterX(this.getCenterX() + vitesseX);
+
+            }
+        }
+
+        follow();
 
     }
 
-    public int getMaxHealth() {
-        return maxHealth;
+    public void follow() {
+        if (centerY < StartingClass.avion.getCenterY()) {
+            if (centerX < StartingClass.avion.getCenterX()) {
+                vitesseX = 3;
+            } else if (centerX > StartingClass.avion.getCenterX()) {
+                vitesseX = -3;
+            } else if (centerX == StartingClass.avion.getCenterX()) {
+                vitesseX = 0;
+            }
+        }
+
     }
 
-    public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
+    public Image getImage() {
+        return image;
     }
 
-    public int getCurrentHealth() {
-        return currentHealth;
-    }
-
-    public void setCurrentHealth(int currentHealth) {
-        this.currentHealth = currentHealth;
-    }
-
-    public int getPower() {
-        return power;
-    }
-
-    public void setPower(int power) {
-        this.power = power;
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public int getCenterX() {
@@ -93,6 +111,22 @@ public class Ennemi extends Thread {
 
     public void setDetruit(boolean detruit) {
         this.detruit = detruit;
+    }
+
+    public int getVitesseX() {
+        return vitesseX;
+    }
+
+    public void setVitesseX(int vitesseX) {
+        this.vitesseX = vitesseX;
+    }
+
+    public List<Projectile> getProjectiles() {
+        return projectiles;
+    }
+
+    public void setProjectiles(List<Projectile> projectiles) {
+        this.projectiles = projectiles;
     }
 
 }

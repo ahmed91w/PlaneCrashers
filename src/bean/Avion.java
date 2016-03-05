@@ -15,7 +15,7 @@ import jetGame.StartingClass;
  */
 public class Avion {
 
-    final int MOVESPEED = 1;
+//    final int MOVESPEED = 1;
 
     private int centerX = 600; //coordonnées
     private int centerY = 540; //coordonnées
@@ -33,7 +33,7 @@ public class Avion {
     private static ArrierePlan bg1 = StartingClass.getBg1();
     private static ArrierePlan bg2 = StartingClass.getBg2();
 
-    private static Rectangle collusion=new Rectangle(0, 0, 0, 0);
+    private static Rectangle collusion = new Rectangle(0, 0, 0, 0);
 
     public void update() {
 
@@ -49,8 +49,8 @@ public class Avion {
         } else if (vitesseY < 0) { //si vitesseY est négative ==> deplacement en haut
             if (centerY > 20) {//pour ne pas depasser les bornes
                 centerY += vitesseY;
-                bg1.setVitesseY(-MOVESPEED);
-                bg2.setVitesseY(-MOVESPEED);
+                bg1.setVitesseY(-1);
+                bg2.setVitesseY(-1);
             }
 
         } else if (vitesseY > 0) { //si vitesseY est posetive ==> deplacement en bas
