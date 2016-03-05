@@ -5,6 +5,7 @@
  */
 package bean;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,10 +17,12 @@ import java.util.Random;
 public class AvionEnnemi extends Ennemi implements Runnable {
 
     private List<AvionEnnemi> avionEnnemis = new ArrayList<>();
-
+   
+    
     public AvionEnnemi(int x, int y) {
-        this.setCenterX(x);
-        this.setCenterY(y);
+        setCenterX(x);
+        setCenterY(y);
+        
 
     }
 
@@ -49,6 +52,8 @@ public class AvionEnnemi extends Ennemi implements Runnable {
             }
         }
     }
+    
+    
 
     
 }

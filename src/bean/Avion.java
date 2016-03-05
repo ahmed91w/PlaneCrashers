@@ -33,7 +33,7 @@ public class Avion {
     private static ArrierePlan bg1 = StartingClass.getBg1();
     private static ArrierePlan bg2 = StartingClass.getBg2();
 
-    private static Rectangle collusion = new Rectangle(0, 0, 0, 0);
+    private  Rectangle r = new Rectangle(0, 0, 0, 0);
 
     public void update() {
 
@@ -59,6 +59,7 @@ public class Avion {
             }
 
         }
+        r.setRect(centerX, centerY, 48, 87);
 
     }
 
@@ -189,5 +190,16 @@ public class Avion {
     public void setHasMessile(boolean hasMessile) {
         this.hasMessile = hasMessile;
     }
+
+    public Rectangle getR() {
+        return r;
+    }
+
+    public void setR(Rectangle r) {
+        this.r = r;
+    }
+
+    
+    
 
 }

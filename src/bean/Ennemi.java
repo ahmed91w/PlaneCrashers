@@ -8,6 +8,8 @@ package bean;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Rectangle;
+import java.util.Random;
 import jetGame.StartingClass;
 
 /**
@@ -18,6 +20,8 @@ public class Ennemi {
 
     private int vitesseY, vitesseX, centerX, centerY;
 
+    private boolean onFire = false;
+
     private ArrierePlan bg = StartingClass.getBg1();
 
     private List<Projectile> projectiles = new ArrayList<>();
@@ -26,6 +30,8 @@ public class Ennemi {
 
     private Image image;
     private Avion avion = StartingClass.avion;
+
+    private Rectangle r = new Rectangle();
 
     public void update() {
 
@@ -45,6 +51,9 @@ public class Ennemi {
         }
 
         follow();
+
+        r.setBounds(centerX, centerY, 40, 40);
+        //checkCollision(Avion.collision);
 
     }
 
@@ -111,6 +120,24 @@ public class Ennemi {
 
     public void setDetruit(boolean detruit) {
         this.detruit = detruit;
+    }
+
+    public boolean checkCollision(Rectangle rect) {
+        if (rect.intersects(r)) {
+            System.out.println("Collision detected!");
+            onFire = true;
+            return true;
+
+        }
+        return false;
+    }
+
+    public boolean isOnFire() {
+        return onFire;
+    }
+
+    public void setOnFire(boolean onFire) {
+        this.onFire = onFire;
     }
 
     public int getVitesseX() {
