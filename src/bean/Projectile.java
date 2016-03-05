@@ -6,6 +6,7 @@
 package bean;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 
 /**
  *
@@ -16,6 +17,7 @@ public class Projectile {
     private int x, y, vitesseY;
     private boolean visible;
     private Image bullet;
+    private Rectangle r = new Rectangle();
 
     public Projectile() {
     }
@@ -25,6 +27,8 @@ public class Projectile {
         this.y = y;
         vitesseY = 7;
         visible = true;
+       
+        
     }
 
     public void update() {
@@ -32,6 +36,8 @@ public class Projectile {
         if (y < 0) {
             visible = false;
         }
+        r.setBounds(this.x, this.y, 40, 40);
+        //checkCollision(AvionEnnemi.r);
 
     }
 
@@ -73,6 +79,13 @@ public class Projectile {
 
     public void setBullet(Image bullet) {
         this.bullet = bullet;
+    }
+    
+    public void checkCollision(Rectangle rect){
+        if(rect.intersects(this.r)){
+            System.out.println("Collision detected![Projectile]");
+            visible=false;
+        }
     }
 
 }

@@ -31,7 +31,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     private Avion avion;
     private AvionEnnemi ennemi;
-    private Image image, character, background, avionMoved, avionActuel, vie1, vie2, vie3, ennemie, explode;
+    private Image image, character, background, avionMoved, avionActuel, vie1, vie2, vie3, ennemie, explode,trans;
     private Image planMovedLeft;
     private Image planMovedRight;
     private Image vide;
@@ -105,15 +105,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             for (int i = 0; i < projectiles.size(); i++) {
                 Projectile p = (Projectile) projectiles.get(i);
                 if (p.isVisible() == true) {
-                    System.out.println("updating shoot");
+                    //System.out.println("updating shoot");
                     p.update();
                 } else {
                     projectiles.remove(i);
                 }
             }
 
-            for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {
-                ennemi.getAvionEnnemis().get(i).update();
+            for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {               
+                    ennemi.getAvionEnnemis().get(i).update();                
             }
             bg1.update();
             bg2.update();
@@ -226,6 +226,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         g.drawImage(vie1, 50, 570, this);
         g.drawImage(vie2, 90, 570, this);
         g.drawImage(vie3, 130, 570, this);
+        //Retangle du collision
+        //g.drawRect((int)Avion.collision.getX(), (int)Avion.collision.getY(), (int)Avion.collision.getWidth(), (int)Avion.collision.getHeight());
 
 //affichage des projectiles
         ArrayList projectiles = avion.getProjectiles();
@@ -233,6 +235,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             Projectile p = (Projectile) projectiles.get(i);
             if (avion.isHasMessile()) {
                 g.drawImage(getImage(getCodeBase(), "res/messile.png"), p.getX(), p.getY(), this);
+               
+                //g.drawRect((int)p.getX(), (int)p.getY(), 20, 20);
+                
+
             } else {
                 g.drawImage(getImage(getCodeBase(), "res/tire3.png"), p.getX(), p.getY(), this);
             }
@@ -240,8 +246,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         }
 //affichage des ennemis
         for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {
-            g.drawImage(ennemie, ennemi.getAvionEnnemis().get(i).getCenterX(), ennemi.getAvionEnnemis().get(i).getCenterY(), this);
+            AvionEnnemi myEnnemi = ennemi.getAvionEnnemis().get(i);
+            g.drawImage(ennemie, myEnnemi.getCenterX(), myEnnemi.getCenterY(), this);
+            //g.drawRect((int)ennemi.getAvionEnnemis().get(i).getCenterX(), (int)ennemi.getAvionEnnemis().get(i).getCenterY(), 70, 60);
+            if(myEnnemi.checkCollision(avion.getR())){               
+                explode = getImage(getCodeBase(), "res/explod.gif");              
+                g.drawImage(explode, myEnnemi.getCenterX(), myEnnemi.getCenterY(), 90, 90, this);
+                    
+                ennemi.getAvionEnnemis().remove(i);
+            }
+            
         }
+        
+        
     }
 
     public static ArrierePlan getBg1() {

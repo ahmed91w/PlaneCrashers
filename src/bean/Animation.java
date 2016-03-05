@@ -5,6 +5,7 @@
  */
 package bean;
 
+import java.awt.Image;
 import java.util.ArrayList;
 
 /**
@@ -26,5 +27,37 @@ public class Animation {
             frameActuel = 0;
         }
     }
+    
+    public synchronized void addFrame(Image image , Long duration){
+    totalDure+=duration;
+    frames.add(new AnimFrame(image, duration));
+    }
+    
+    private AnimFrame getFrame(int i ){
+        return (AnimFrame)frames.get(i);
+    }
+    
+    public synchronized void update(long elapsedTime){
+        if(frames.size()>1){
+            tempsAnimation +=elapsedTime;
+            if(tempsAnimation>=totalDure){
+                tempsAnimation = tempsAnimation % totalDure;
+                frameActuel=0;
+            }
+            while(tempsAnimation > getFrame(frameActuel).endTime ){
+                frameActuel++;
+            }
+        }
+    }
+    
+    public synchronized Image getImage(){
+        if(frames.size() == 0){
+            return null;
+        }else {
+            return getFrame(frameActuel).image;
+        }
+    }
+    
 }
+
 

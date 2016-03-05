@@ -5,6 +5,7 @@
  */
 package bean;
 
+import java.awt.Rectangle;
 import java.util.Random;
 import jetGame.StartingClass;
 
@@ -15,15 +16,18 @@ import jetGame.StartingClass;
 public class Ennemi extends Thread {
 
     private int maxHealth, currentHealth, power, vitesseY, centerX, centerY;
-
+    private boolean onFire=false;
     private ArrierePlan bg = StartingClass.getBg1();
 
     private boolean detruit = false;
+    private Rectangle r = new Rectangle();
 
     public void update() {
 
         centerY -= vitesseY;
         vitesseY = - 3;
+        r.setBounds(centerX, centerY, 40, 40);
+        //checkCollision(Avion.collision);
 
     }
 
@@ -93,6 +97,24 @@ public class Ennemi extends Thread {
 
     public void setDetruit(boolean detruit) {
         this.detruit = detruit;
+    }
+    
+    public boolean checkCollision(Rectangle rect){
+        if(rect.intersects(r)){
+            System.out.println("Collision detected!");
+            onFire=true;
+            return true;
+            
+        }
+        return false;
+    }
+
+    public boolean isOnFire() {
+        return onFire;
+    }
+
+    public void setOnFire(boolean onFire) {
+        this.onFire = onFire;
     }
 
 }
