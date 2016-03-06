@@ -91,29 +91,30 @@ public class BossEnnemi extends Ennemi implements Runnable {
     @Override
     public void run() {
         while (currentHealth != 0) {
-            
+
             this.shootMal();
             System.out.println("thread shoot BOSSSSS");
 
             if (this.getCenterX() >= 1300) {
-                vitesse = -5;
+                vitesse = -4;
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>Vitesse " + vitesse);
             } else if (this.getCenterX() <= 10) {
-                vitesse =5;
+                vitesse = 4;
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>Vitesse " + vitesse);
             }
-            
+
 //            this.update();
             try {
-                Thread.sleep(500);
+                Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
         }
+
     }
 
     public void shootMal() {
-        Projectile p = new Projectile(this.getCenterX() + 70, this.getCenterY() + 300);
+        Projectile p = new Projectile(this.getCenterX() + 60, this.getCenterY() + 200);
 //        p.setVisible(true);
         projectiles.add(p);
         System.out.println("nombre de shoot Boss " + projectiles.size());
@@ -140,6 +141,5 @@ public class BossEnnemi extends Ennemi implements Runnable {
         }
 
     }
-
 
 }

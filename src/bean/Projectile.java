@@ -42,8 +42,12 @@ public class Projectile implements Runnable {
     public void update() {
         vitesseY = 7;
         y -= vitesseY;
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>projectil se deplace");
         if (y < 0) {
             //arrete du thread
+            this.moveProj.stop();
+
+            System.out.println("----------Projectil stoped");
         }
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>> Y " + y);
@@ -99,13 +103,11 @@ public class Projectile implements Runnable {
 //            visible = false;
 //        }
 //    }
-    public void paint(Graphics g) {
-        g.drawImage(bullet, x, y, startingClass);
-    }
+
 
     @Override
     public void run() {
-        while (y > 0) {
+
         update();
 //        updateProjectileEnnemi();
         try {
@@ -113,8 +115,6 @@ public class Projectile implements Runnable {
 //To change body of generated methods, choose Tools | Templates.
         } catch (InterruptedException ex) {
             Logger.getLogger(Projectile.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>projectil se deplace");
         }
 
     }

@@ -10,7 +10,6 @@ import bean.Attack;
 import bean.Avion;
 import bean.AvionEnnemi;
 import bean.BossEnnemi;
-import bean.Ennemi;
 import bean.Niveau;
 import bean.Partie;
 import bean.Projectile;
@@ -22,13 +21,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Panel;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
 
 /**
  *
@@ -50,7 +47,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     private Thread shootBoss;
     private BossEnnemi bossEnnemi;
     private Partie partie;
-    private Niveau niveau = new Niveau(2);
+    private Niveau niveau = new Niveau(3);
     Projectile p;
     private Attack attack;
     private List<AvionEnnemi> avionEnnemis = new ArrayList<>();
@@ -82,66 +79,48 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         planMovedLeft = getImage(getCodeBase(), "res/moveLeft.png");
         planMovedRight = getImage(getCodeBase(), "res/moveRight.PNG");
 
-//        boss = getImage(getCodeBase(), "res/Boss B-3.mini.png");
+        boss = getImage(getCodeBase(), "res/Boss B-3.mini.png");
         avionActuel = character;
         background = getImage(getCodeBase(), "res/warshipsBackground-Récupéré.jpg");
         attack = new Attack();
-//        ajoutEnnemis = new Thread(ennemi);
-//        Projectile p=new Projectile(bossEnnemi.getCenterX()+25, bossEnnemi.getCenterY()+25);
-//        bossEnnemi.getProjectiles().add(p);
+        bossEnnemi = new BossEnnemi();
     }
 
     @Override
     public void start() {
-        Projectile p;
+
         bg1 = new ArrierePlan(0, -1750);
         bg2 = new ArrierePlan(0, -4200);
         avion = new Avion();
 
-        board = new ScoreBoard();
-//        Ennemi ennemi = new Ennemi();
-//        ajoutEnnemis = new Thread(ennemi);
-//        ajoutEnnemis.start();
         thread = new Thread(this);
         thread.start();
+
+        Thread attackThread = new Thread(attack);
+        attackThread.start();
+        try {
+            attackThread.sleep(500);
+
+        } catch (InterruptedException ex) {
+            Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
+        }
+//lancer les threads ici
         ArrayList projectiles = avion.getProjectiles();
         for (int i = 0; i < projectiles.size(); i++) {
             Projectile p1 = (Projectile) projectiles.get(i);
-            Thread t1 = new Thread(p1);
-            t1.start();
+            p1.getMoveProj().start();
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
                 Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
-        Thread attackThread = new Thread(attack);
-        attackThread.start();
-        try {
-            attackThread.sleep(500);
-//        if (niveau.getDifficulte() == 3) {
-//            bossEnnemi = new BossEnnemi();
-//            shootBoss = new Thread(bossEnnemi);
-//            shootBoss.start();
-//        }
-//        ajoutEnnemis.start();
-//lancer les threads ici
-        } catch (InterruptedException ex) {
-            Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
+        if (niveau.getDifficulte() == 3) {
+            bossEnnemi.update();
+            shootBoss = new Thread(bossEnnemi);
+            shootBoss.start();
         }
 
-//        for (int i = 0; i < Attack.avionEnnemis.size(); i++) {
-//            Attack.avionEnnemis.get(i);
-//            Thread moveEnnemi = new Thread(Attack.avionEnnemis.get(i));
-//            moveEnnemi.start();
-//
-//            try {
-//                Thread.sleep(500);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
 
     @Override
@@ -156,38 +135,27 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 avionActuel = character;
             }
 
-//            Random rand = new Random();
-//            int random = rand.nextInt((1300 - 300) + 1) + 600;
-//            if (niveau.getDifficulte() == 3) {
-//                System.out.println(" >>>>>>>>>>>>>>>> " + BossEnnemi.projectiles.size());
-//                for (int i = 0; i < BossEnnemi.projectiles.size(); i++) {
-//
-//                    if (BossEnnemi.projectiles.get(i).isVisible() == true) {
-//                        System.out.println("updating shoot Boss");
-//                        BossEnnemi.projectiles.get(i).updateProjectileEnnemi();
-//                    }
-//                }
-//            }
-            //mis a jour deplacement AvionEnnemi
-//            for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {
-//                ennemi.getAvionEnnemis().get(i).update();
-//                if (niveau.getDifficulte() == 2) {
-//                    if (ennemi.getAvionEnnemis().get(i).getProjectiles().size() != 0) {
-//                        for (int j = 0; j < ennemi.getAvionEnnemis().get(i).getProjectiles().size(); j++) {
-//                            ennemi.getAvionEnnemis().get(i).getProjectiles().get(i).update();
-//                        }
-//                    }
-//                }
-//            }
+            Random rand = new Random();
+            int random = rand.nextInt((1300 - 300) + 1) + 600;
+            if (niveau.getDifficulte() == 3) {
+                System.out.println(" >>>>>>>>>>>>>>>> " + BossEnnemi.projectiles.size());
+                for (int i = 0; i < BossEnnemi.projectiles.size(); i++) {
+
+                    System.out.println("updating shoot Boss");
+                    BossEnnemi.projectiles.get(i).updateProjectileEnnemi();
+
+                }
+            }
+
             bg1.update();
             bg2.update();
-//            if (niveau.getDifficulte() == 3) {
-//                bossEnnemi.update();
-//            }
+            if (niveau.getDifficulte() == 3) {
+                bossEnnemi.update();
+            }
 
             repaint();
             try {
-                Thread.sleep(15);
+                Thread.sleep(17);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -229,7 +197,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 break;
             case KeyEvent.VK_SPACE:
                 avion.shoot();
-                Attack.avionEnnemis.get(0).getAvion().stop();
+
                 System.out.println("SPACE Fire button Pressed " + e.getKeyCode());
                 break;
 
@@ -295,13 +263,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             g.drawImage(getImage(getCodeBase(), "res/tire3.png"), p.getY(), p.getX(), this);
         }
 
-//affichage des ennemis
-//        for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {
-//            g.drawImage(ennemie, ennemi.getAvionEnnemis().get(i).getCenterX(), ennemi.getAvionEnnemis().get(i).getCenterY(), this);
-//        }
-        //Retangle du collision
-        //g.drawRect((int)Avion.collision.getX(), (int)Avion.collision.getY(), (int)Avion.collision.getWidth(), (int)Avion.collision.getHeight());
-//affichage des projectiles
         ArrayList projectiles = avion.getProjectiles();
         for (int i = 0; i < projectiles.size(); i++) {
             Projectile p = (Projectile) projectiles.get(i);
@@ -314,39 +275,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             }
 
         }
-//        if (niveau.getDifficulte() == 3) {
-//            g.drawImage(boss, bossEnnemi.getCenterX(), bossEnnemi.getCenterY(), this);
-//
-//            for (int i = 0; i < BossEnnemi.projectiles.size(); i++) {
-//
-//                if (BossEnnemi.projectiles.get(i).isVisible() == true) {
-//                    System.out.println("drawing shoot Boss");
-//                    g.drawImage(getImage(getCodeBase(), "res/tiremal.png"), BossEnnemi.projectiles.get(i).getX(), BossEnnemi.projectiles.get(i).getY(), this);
-//                }
-//
-//            }
-//        }
-//affichage des ennemis
-//        for (int i = 0; i < ennemi.getAvionEnnemis().size(); i++) {
-//            AvionEnnemi myEnnemi = ennemi.getAvionEnnemis().get(i);
-//            g.drawImage(ennemie, myEnnemi.getCenterX(), myEnnemi.getCenterY(), this);
-//            //g.drawRect((int)ennemi.getAvionEnnemis().get(i).getCenterX(), (int)ennemi.getAvionEnnemis().get(i).getCenterY(), 70, 60);
-//            if (niveau.getDifficulte() == 2) {
-//                for (int j = 0; j < ennemi.getAvionEnnemis().get(i).getProjectiles().size(); j++) {
-//                    ennemi.getAvionEnnemis().get(i).getProjectiles().get(i);
-//                    g.drawImage(getImage(getCodeBase(), "res/tire2.png"), ennemi.getAvionEnnemis().get(i).getProjectiles().get(i).getX(), ennemi.getAvionEnnemis().get(i).getProjectiles().get(i).getY(), this);
-//                }
-//            }
-//
-//            if (myEnnemi.checkCollision(avion.getR())) {
-//                explode = getImage(getCodeBase(), "res/explod.gif");
-//
-//                g.drawImage(explode, myEnnemi.getCenterX(), myEnnemi.getCenterY(), 90, 90, this);
-//
-//                ennemi.getAvionEnnemis().remove(i);
-//            }
-//
-//        }
+        if (niveau.getDifficulte() == 3) {
+            g.drawImage(boss, bossEnnemi.getCenterX(), bossEnnemi.getCenterY(), this);
+
+            for (int i = 0; i < BossEnnemi.projectiles.size(); i++) {
+
+                System.out.println("drawing shoot Boss");
+                g.drawImage(getImage(getCodeBase(), "res/tiremal.png"), BossEnnemi.projectiles.get(i).getX(), BossEnnemi.projectiles.get(i).getY(), this);
+
+            }
+        }
+
         for (int i = 0; i < Attack.avionEnnemis.size(); i++) {
             explode = getImage(getCodeBase(), "res/explod.gif");
             if (Attack.avionEnnemis.get(i).isDetruit() == true) {
