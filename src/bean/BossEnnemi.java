@@ -37,13 +37,13 @@ public class BossEnnemi extends Ennemi implements Runnable {
     public void update() {
         follow();
         if (vitesse > 0) {
-            if (this.getCenterX() < 1200) {
+            if (this.getCenterX() < 1300) {
                 this.setCenterX(this.getCenterX() + vitesse);
                 System.out.println("Boss x=" + this.getCenterX());
             }
 
         } else if (vitesse < 0) {
-            if (this.getCenterX() > 20) {
+            if (this.getCenterX() > 10) {
                 this.setCenterX(this.getCenterX() + vitesse);
                 System.out.println("Boss x=" + this.getCenterX());
             }
@@ -91,18 +91,21 @@ public class BossEnnemi extends Ennemi implements Runnable {
     @Override
     public void run() {
         while (currentHealth != 0) {
+            
             this.shootMal();
             System.out.println("thread shoot BOSSSSS");
 
-            if (this.getCenterX() >= 1200) {
-                vitesse = -2;
+            if (this.getCenterX() >= 1300) {
+                vitesse = -5;
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>Vitesse " + vitesse);
-            } else if (this.getCenterX() <= 20) {
-                vitesse = 2;
+            } else if (this.getCenterX() <= 10) {
+                vitesse =5;
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>Vitesse " + vitesse);
             }
+            
+//            this.update();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
@@ -111,7 +114,7 @@ public class BossEnnemi extends Ennemi implements Runnable {
 
     public void shootMal() {
         Projectile p = new Projectile(this.getCenterX() + 70, this.getCenterY() + 300);
-        p.setVisible(true);
+//        p.setVisible(true);
         projectiles.add(p);
         System.out.println("nombre de shoot Boss " + projectiles.size());
 
@@ -138,16 +141,5 @@ public class BossEnnemi extends Ennemi implements Runnable {
 
     }
 
-//    @Override
-//    public synchronized void start() {
-//        while (currentHealth != 0) {
-//            this.shootMal();
-//            System.out.println("thread shoot BOSSSSS");
-//            try {
-//                Thread.sleep(5000);
-//            } catch (InterruptedException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//    }
+
 }

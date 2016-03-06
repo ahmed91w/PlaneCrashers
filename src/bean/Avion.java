@@ -15,17 +15,15 @@ import jetGame.StartingClass;
  */
 public class Avion {
 
-//    final int MOVESPEED = 1;
-
     private int centerX = 600; //coordonnées
     private int centerY = 540; //coordonnées
     private boolean hasMessile = true;
-    private static int vie = 3;
+    public static int vie = 3;
 
     private int vitesseX = 0;
     private int vitesseY = 0;
 
-    private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+    public static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
     private boolean movingUp = false;
     private boolean movingDown = false;
@@ -33,7 +31,7 @@ public class Avion {
     private static ArrierePlan bg1 = StartingClass.getBg1();
     private static ArrierePlan bg2 = StartingClass.getBg2();
 
-    private  Rectangle r = new Rectangle(0, 0, 0, 0);
+    private Rectangle r = new Rectangle(0, 0, 0, 0);
 
     public void update() {
 
@@ -198,8 +196,5 @@ public class Avion {
     public void setR(Rectangle r) {
         this.r = r;
     }
-
-    
-    
 
 }

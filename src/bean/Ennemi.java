@@ -9,7 +9,6 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Rectangle;
-import java.util.Random;
 import jetGame.StartingClass;
 
 /**
@@ -28,33 +27,41 @@ public class Ennemi {
 
     private boolean detruit = false;
 
+    private boolean canShoot;
+
     private Image image;
+
+    private Niveau niveau;
+
     private Avion avion = StartingClass.avion;
 
     private Rectangle r = new Rectangle();
 
     public void update() {
+        if (detruit == false) {
+            centerY -= vitesseY;
+            vitesseY = -4;
+            if (vitesseX > 0) {
+                if (this.getCenterX() < 1200) {
+                    this.setCenterX(this.getCenterX() + vitesseX);
 
-        centerY -= vitesseY;
-        vitesseY = - 3;
-        if (vitesseX > 0) {
-            if (this.getCenterX() < 1200) {
-                this.setCenterX(this.getCenterX() + vitesseX);
+                }
 
+            } else if (vitesseX < 0) {
+                if (this.getCenterX() > 20) {
+                    this.setCenterX(this.getCenterX() + vitesseX);
+
+                }
             }
 
-        } else if (vitesseX < 0) {
-            if (this.getCenterX() > 20) {
-                this.setCenterX(this.getCenterX() + vitesseX);
-
-            }
+//            follow();
+            r.setBounds(centerX, centerY, 40, 40);
+        } else {
+            this.setCenterX(this.getCenterX() + 5);
+            this.setCenterY(this.getCenterY() + 1);
         }
 
-        follow();
-
-        r.setBounds(centerX, centerY, 40, 40);
         //checkCollision(Avion.collision);
-
     }
 
     public void follow() {
@@ -122,10 +129,20 @@ public class Ennemi {
         this.detruit = detruit;
     }
 
+    public void shootMal() {
+        Projectile p = new Projectile(this.getCenterX() + 25, this.getCenterY() + 25);
+//        p.setVisible(true);
+        projectiles.add(p);
+        System.out.println("nombre de shoot Ennemi " + projectiles.size());
+
+    }
+
     public boolean checkCollision(Rectangle rect) {
         if (rect.intersects(r)) {
             System.out.println("Collision detected!");
             onFire = true;
+            detruit = true;
+
             return true;
 
         }
@@ -154,6 +171,30 @@ public class Ennemi {
 
     public void setProjectiles(List<Projectile> projectiles) {
         this.projectiles = projectiles;
+    }
+
+    public boolean isCanShoot() {
+        return canShoot;
+    }
+
+    public void setCanShoot(boolean canShoot) {
+        this.canShoot = canShoot;
+    }
+
+    public Avion getAvion() {
+        return avion;
+    }
+
+    public void setAvion(Avion avion) {
+        this.avion = avion;
+    }
+
+    public Rectangle getR() {
+        return r;
+    }
+
+    public void setR(Rectangle r) {
+        this.r = r;
     }
 
 }

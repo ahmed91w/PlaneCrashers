@@ -5,38 +5,48 @@
  */
 package bean;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import jetGame.StartingClass;
 
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  */
-public class Projectile {
+public class Projectile implements Runnable {
 
     private int x, y, vitesseY;
-    private boolean visible;
     private Image bullet;
     private Rectangle r = new Rectangle();
+    private Thread moveProj;
+    public static StartingClass startingClass;
 
     public Projectile() {
     }
 
     public Projectile(int x, int y) {
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
         this.x = x;
         this.y = y;
         vitesseY = 1;
-        visible = true;
-       
-        
+        moveProj = new Thread(this);
+        bullet = toolkit.getImage("src/resources/tire1.png");
     }
 
     public void update() {
         vitesseY = 7;
         y -= vitesseY;
         if (y < 0) {
-            visible = false;
+            //arrete du thread
         }
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>> Y " + y);
         r.setBounds(this.x, this.y, 40, 40);
         //checkCollision(AvionEnnemi.r);
 
@@ -46,7 +56,7 @@ public class Projectile {
         vitesseY = 3;
         y += vitesseY;
         if (y > 700) {
-            visible = false;
+            this.moveProj.stop();
         }
 
     }
@@ -75,14 +85,6 @@ public class Projectile {
         this.vitesseY = vitesseY;
     }
 
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
     public Image getBullet() {
         return bullet;
     }
@@ -90,12 +92,47 @@ public class Projectile {
     public void setBullet(Image bullet) {
         this.bullet = bullet;
     }
-    
-    public void checkCollision(Rectangle rect){
-        if(rect.intersects(this.r)){
-            System.out.println("Collision detected![Projectile]");
-            visible=false;
+
+//    public void checkCollision(Rectangle rect) {
+//        if (rect.intersects(this.r)) {
+//            System.out.println("Collision detected![Projectile]");
+//            visible = false;
+//        }
+//    }
+    public void paint(Graphics g) {
+        g.drawImage(bullet, x, y, startingClass);
+    }
+
+    @Override
+    public void run() {
+        while (y > 0) {
+        update();
+//        updateProjectileEnnemi();
+        try {
+            Thread.sleep(500);
+//To change body of generated methods, choose Tools | Templates.
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Projectile.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>projectil se deplace");
+        }
+
+    }
+
+    public Thread getMoveProj() {
+        return moveProj;
+    }
+
+    public void setMoveProj(Thread moveProj) {
+        this.moveProj = moveProj;
+    }
+
+    public static StartingClass getStartingClass() {
+        return startingClass;
+    }
+
+    public static void setStartingClass(StartingClass startingClass) {
+        Projectile.startingClass = startingClass;
     }
 
 }
