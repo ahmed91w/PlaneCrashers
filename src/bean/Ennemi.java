@@ -44,18 +44,15 @@ public class Ennemi {
             if (vitesseX > 0) {
                 if (this.getCenterX() < 1200) {
                     this.setCenterX(this.getCenterX() + vitesseX);
-
                 }
-
             } else if (vitesseX < 0) {
                 if (this.getCenterX() > 20) {
                     this.setCenterX(this.getCenterX() + vitesseX);
-
                 }
             }
 
-//            follow();
-            r.setBounds(centerX, centerY, 40, 40);
+            follow();
+            r.setBounds(centerX, centerY, 69, 60);
         } else {
             this.setCenterX(this.getCenterX() + 5);
             this.setCenterY(this.getCenterY() + 1);
@@ -139,9 +136,9 @@ public class Ennemi {
 
     public boolean checkCollision(Rectangle rect) {
         if (rect.intersects(r)) {
-            System.out.println("Collision detected!");
-            onFire = true;
-            detruit = true;
+            System.out.println("ENEMIS Collision detected!");
+//            onFire = true;
+//            detruit = true;
 
             return true;
 

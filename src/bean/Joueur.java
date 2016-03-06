@@ -12,11 +12,13 @@ package bean;
 public class Joueur {
 
     private String nom;
-    private double totalScore=0;
+    private double totalScore = 0;
+    public static int tentative = 3;
 
     public Joueur(String nom) {
         this.nom = nom;
         this.totalScore = 0;
+        tentative = 3;
     }
 
     public String getNom() {
@@ -34,5 +36,13 @@ public class Joueur {
     public void setTotalScore(double totalScore) {
         this.totalScore = totalScore;
     }
-    
+
+    public static int getTentative() {
+        return tentative;
+    }
+
+    public static void setTentative(int tentative) {
+        Joueur.tentative = tentative;
+    }
+
 }

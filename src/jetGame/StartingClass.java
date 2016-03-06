@@ -8,24 +8,24 @@ package jetGame;
 import bean.ArrierePlan;
 import bean.Attack;
 import bean.Avion;
-import bean.AvionEnnemi;
 import bean.BossEnnemi;
+import bean.Joueur;
 import bean.Niveau;
-import bean.Partie;
 import bean.Projectile;
-import bean.ScoreBoard;
+
 import java.applet.Applet;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.nio.file.ClosedWatchServiceException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  *
@@ -34,26 +34,33 @@ import java.util.logging.Logger;
 public class StartingClass extends Applet implements Runnable, KeyListener {
 
     public static Avion avion;
-//    private AvionEnnemi ennemi = new AvionEnnemi(500, 0);
-    private Image image, character, background, avionMoved, avionActuel, vie1, vie2, vie3, ennemie, explode, trans;
+    private Image image, character, background,
+            avionMoved, avionActuel, vieOff, vieOn, ennemie, explode, trans;
     private Image planMovedLeft;
     private Image planMovedRight;
     private Image boss;
+    private Image gameOver;
     private Thread thread;
     private static ArrierePlan bg1, bg2;
     private Graphics second;
-    private ScoreBoard board;
-    private Thread ajoutEnnemis;
     private Thread shootBoss;
     private BossEnnemi bossEnnemi;
-    private Partie partie;
-    private Niveau niveau = new Niveau(3);
-    Projectile p;
+    private Niveau niveau = new Niveau(1);
+    //pour lancer l'Attack des Avion Ennemis
     private Attack attack;
-    private List<AvionEnnemi> avionEnnemis = new ArrayList<>();
+    private int score = 0;
+    private Thread shootThread;
+    private Joueur joueur = new Joueur("Ahmed");
+
+    enum EtatJeu {
+        Running, Dead
+    }
+
+    EtatJeu etat = EtatJeu.Running;
 
     @Override
     public void destroy() {
+        Platform.exit();
     }
 
     @Override
@@ -69,33 +76,38 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         addKeyListener(this);
         Frame frame = (Frame) this.getParent().getParent();
         frame.setResizable(false);
+        frame.setTitle("JetGame By AHMED WAFDI & ANAS SAOUDI");
+        Font f = new Font("Arial", Font.BOLD, 18);
+        setFont(f);
+        //Images
         character = getImage(getCodeBase(), "res/mini-plan1.png");
         avionMoved = getImage(getCodeBase(), "res/mini-plan1-onMove.png");
-        vie1 = getImage(getCodeBase(), "res/nbr-vie.png");
-        vie2 = getImage(getCodeBase(), "res/nbr-vie.png");
-        vie3 = getImage(getCodeBase(), "res/nbr-vie.png");
-
+        vieOff = getImage(getCodeBase(), "res/nbr-vie-off.png");
+        vieOn = getImage(getCodeBase(), "res/nbr-vieON.png");
         ennemie = getImage(getCodeBase(), "res/ennemi-mini.png");
         planMovedLeft = getImage(getCodeBase(), "res/moveLeft.png");
         planMovedRight = getImage(getCodeBase(), "res/moveRight.PNG");
-
         boss = getImage(getCodeBase(), "res/Boss B-3.mini.png");
         avionActuel = character;
         background = getImage(getCodeBase(), "res/warshipsBackground-Récupéré.jpg");
+        gameOver = getImage(getCodeBase(), "res/gameOver.png");
+        //Instanceiation des Objets
         attack = new Attack();
         bossEnnemi = new BossEnnemi();
+
     }
 
     @Override
     public void start() {
-
+        //lancer les threads ici
+//Inctances des Backgrounds et Avion
         bg1 = new ArrierePlan(0, -1750);
         bg2 = new ArrierePlan(0, -4200);
         avion = new Avion();
 
         thread = new Thread(this);
         thread.start();
-
+        //Lancement de l'Attack des AvionEnnemis
         Thread attackThread = new Thread(attack);
         attackThread.start();
         try {
@@ -104,61 +116,69 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         } catch (InterruptedException ex) {
             Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
         }
-//lancer les threads ici
-        ArrayList projectiles = avion.getProjectiles();
-        for (int i = 0; i < projectiles.size(); i++) {
-            Projectile p1 = (Projectile) projectiles.get(i);
-            p1.getMoveProj().start();
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+//verifier l activation du BOSS
         if (niveau.getDifficulte() == 3) {
             bossEnnemi.update();
             shootBoss = new Thread(bossEnnemi);
             shootBoss.start();
         }
+//        shootThread.start();
 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void run() {
-        while (avion.getVie() != 0) {
+        while (joueur.tentative != 0) {
+
+            //rafraichire l ecrant tant que l'avion et en vie
+            while (avion.getVie() != 0) {
 //les modifications des x,y se fait ici;
-
-            avion.update();
-            if (avion.isMovingUp()) {
-                avionActuel = avionMoved;
-            } else if (avion.isMovingDown()) {
-                avionActuel = character;
-            }
-
-            Random rand = new Random();
-            int random = rand.nextInt((1300 - 300) + 1) + 600;
-            if (niveau.getDifficulte() == 3) {
-                System.out.println(" >>>>>>>>>>>>>>>> " + BossEnnemi.projectiles.size());
-                for (int i = 0; i < BossEnnemi.projectiles.size(); i++) {
-
-                    System.out.println("updating shoot Boss");
-                    BossEnnemi.projectiles.get(i).updateProjectileEnnemi();
-
+//mise ajour la position de l'avion
+                avion.update();
+                if (avion.isMovingUp()) {
+                    avionActuel = avionMoved;
+                } else if (avion.isMovingDown()) {
+                    avionActuel = character;
                 }
+//Verifier l activation du BOSS
+                if (niveau.getDifficulte() == 3) {
+                    System.out.println(" >>>>>>>>>>>>>>>> " + BossEnnemi.projectiles.size());
+                    for (int i = 0; i < BossEnnemi.projectiles.size(); i++) {
+
+                        System.out.println("updating shoot Boss");
+                        BossEnnemi.projectiles.get(i).updateProjectileEnnemi();
+
+                    }
+                    bossEnnemi.update();
+                }
+
+                for (int i = 0; i < Avion.projectiles.size(); i++) {
+                    avion.getProjectiles().get(i).update();
+                }
+
+                bg1.update();
+                bg2.update();
+
+                checkAvionColision();
+                if (checkcolision()) {
+                    removeProjectil();
+                }
+
+                repaint();
+                try {
+                    Thread.sleep(15);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
 
-            bg1.update();
-            bg2.update();
-            if (niveau.getDifficulte() == 3) {
-                bossEnnemi.update();
-            }
-
-            repaint();
-            try {
-                Thread.sleep(17);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            joueur.tentative -= 1;
 
         }
     }
@@ -196,7 +216,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 System.out.println("vol gauche Pressed" + e.getKeyCode());
                 break;
             case KeyEvent.VK_SPACE:
-                avion.shoot();
 
                 System.out.println("SPACE Fire button Pressed " + e.getKeyCode());
                 break;
@@ -229,6 +248,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 System.out.println("Arrête de bouger à droite " + e.getKeyCode());
                 break;
             case KeyEvent.VK_SPACE:
+                avion.shoot();
                 System.out.println(" SPACE Fire button Released" + e.getKeyCode());
                 break;
 
@@ -255,25 +275,34 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public void paint(Graphics g) {
         g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
         g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
+        switch (avion.vie) {
 
-        g.drawImage(vie1, 50, 570, this);
-        g.drawImage(vie2, 90, 570, this);
-        g.drawImage(vie3, 130, 570, this);
-        if (p != null) {
-            g.drawImage(getImage(getCodeBase(), "res/tire3.png"), p.getY(), p.getX(), this);
+            case 1:
+                g.drawImage(vieOn, 50, 570, this);
+                g.drawImage(vieOff, 90, 570, this);
+                g.drawImage(vieOff, 130, 570, this);
+                break;
+            case 2:
+                g.drawImage(vieOn, 50, 570, this);
+                g.drawImage(vieOn, 90, 570, this);
+                g.drawImage(vieOff, 130, 570, this);
+                break;
+            case 3:
+                g.drawImage(vieOn, 50, 570, this);
+                g.drawImage(vieOn, 90, 570, this);
+                g.drawImage(vieOn, 130, 570, this);
+                break;
+
         }
 
         ArrayList projectiles = avion.getProjectiles();
         for (int i = 0; i < projectiles.size(); i++) {
             Projectile p = (Projectile) projectiles.get(i);
-            if (avion.isHasMessile()) {
-                g.drawImage(getImage(getCodeBase(), "res/messile.png"), p.getX(), p.getY(), this);
 
-                //g.drawRect((int)p.getX(), (int)p.getY(), 20, 20);
-            } else {
-                g.drawImage(getImage(getCodeBase(), "res/tire3.png"), p.getX(), p.getY(), this);
-            }
+            System.out.println("drawing shooot Avion");
 
+            g.drawImage(getImage(getCodeBase(), "res/messile.png"), p.getX(), p.getY(), this);
+            g.drawRect(p.getX(), p.getY(), 5, 20);
         }
         if (niveau.getDifficulte() == 3) {
             g.drawImage(boss, bossEnnemi.getCenterX(), bossEnnemi.getCenterY(), this);
@@ -286,17 +315,20 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             }
         }
 
-        for (int i = 0; i < Attack.avionEnnemis.size(); i++) {
+        for (int i = 0; i < Attack.getAvionEnnemis().size(); i++) {
             explode = getImage(getCodeBase(), "res/explod.gif");
-            if (Attack.avionEnnemis.get(i).isDetruit() == true) {
-                g.drawImage(explode, Attack.avionEnnemis.get(i).getCenterX(), Attack.avionEnnemis.get(i).getCenterY(), this);
-
+            if (Attack.getAvionEnnemis().get(i).isDetruit() == true) {
+                g.drawImage(explode, Attack.getAvionEnnemis().get(i).getCenterX(), Attack.getAvionEnnemis().get(i).getCenterY(), this);
             }
-            g.drawImage(Attack.avionEnnemis.get(i).getImage(), Attack.avionEnnemis.get(i).getCenterX(), Attack.avionEnnemis.get(i).getCenterY(), this);
+            g.drawImage(Attack.getAvionEnnemis().get(i).getImage(), Attack.getAvionEnnemis().get(i).getCenterX(), Attack.getAvionEnnemis().get(i).getCenterY(), this);
+            g.drawRect(Attack.getAvionEnnemis().get(i).getCenterX(), Attack.getAvionEnnemis().get(i).getCenterY(), 69, 60);
+
         }
 
         g.drawImage(avionActuel, avion.getCenterX(), avion.getCenterY(), this);
-
+        g.drawRect(avion.getCenterX(), avion.getCenterY(), 48, 87);
+        g.drawString("Player " + joueur.getNom(), 1200, 40);
+        g.drawString("SCORE " + score, 1200, 80);
     }
 
     public static ArrierePlan getBg1() {
@@ -307,4 +339,66 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         return bg2;
     }
 
+    public synchronized void removeProjectil() {
+        System.out.println("REMOVE  PROJECTILS");
+        System.out.println(">>>>>>>>>>>>>> SIZE PROJECTILES " + avion.getProjectiles().size());
+        for (int i = 0; i < avion.getProjectiles().size(); i++) {
+            if (avion.getProjectiles().get(i).getY() < 0) {
+                avion.getProjectiles().remove(i);
+            }
+        }
+        notifyAll();
+    }
+
+    public synchronized void checkAvionColision() {
+        System.out.println("CHECK COLLISION");
+        System.out.println(">>>>>>>>>>>>>> SIZE AVION ENNEMIS " + Attack.getAvionEnnemis().size());
+        for (int i = 0; i < Attack.getAvionEnnemis().size(); i++) {
+            if (Attack.getAvionEnnemis().get(i).checkCollision(avion.getR())) {
+                Attack.getAvionEnnemis().get(i).getMoveAvionEnnemi().stop();
+                Attack.getAvionEnnemis().remove(i);
+                Avion.vie -= 1;
+            }
+        }
+        notifyAll();
+    }
+
+    public synchronized boolean checkcolision() {
+
+        System.out.println("CHECK COLLISION");
+        System.out.println(">>>>>>>>>>>>>> SIZE AVION ENNEMIS " + Attack.getAvionEnnemis().size());
+        System.out.println(">>>>>>>>>>>>>> SIZE PROJECTILES " + avion.getProjectiles().size());
+        if (Attack.getAvionEnnemis().size() > 0) {
+            for (int i = 0; i < Attack.getAvionEnnemis().size(); i++) {
+                if (i > 0) {
+                    for (int j = 0; j < avion.getProjectiles().size(); j++) {
+                        if (j > 0) {
+
+                            try {
+                                if (Attack.getAvionEnnemis().get(i).checkCollision(avion.getProjectiles().get(j).getR())) {
+
+                                    Attack.getAvionEnnemis().get(i).getMoveAvionEnnemi().stop();
+                                    Attack.getAvionEnnemis().remove(i);
+                                    avion.getProjectiles().remove(j);
+
+                                    score += 10;
+                                    System.out.println("COLLISION DETECTED WHIT SCORE :" + score);
+                                    return true;
+                                }
+                            } catch (Exception e) {
+                                System.out.println("<<<<<<<<<<< ENEMIS>>>>>>>>>>" + i);
+                                System.out.println("<<<<<<<<<<<SIZE PROJECTIL>>>>>>>>>>" + Attack.getAvionEnnemis().size());
+                                System.out.println("<<<<<<<<<<< PROJECTIL>>>>>>>>>>" + j);
+                                System.out.println("<<<<<<<<<<<SIZE PROJECTIL>>>>>>>>>>" + avion.getProjectiles().size());
+                                System.exit(1);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        notifyAll();
+        return false;
+    }
 }

@@ -16,7 +16,7 @@ import jetGame.StartingClass;
  */
 public class Attack implements Runnable {
 
-    public static List<AvionEnnemi> avionEnnemis = new ArrayList<>();
+    private static List<AvionEnnemi> avionEnnemis = new ArrayList<>();
 
     public Attack() {
 
@@ -36,23 +36,22 @@ public class Attack implements Runnable {
 
     @Override
     public void run() {
-        if (avionEnnemis.size() < 5) {
-            Random random = new Random();
-
-            while (StartingClass.avion.vie != 0) {
-                AvionEnnemi a = AvionEnnemi.newEnnemi();
-                a.getMoveAvionEnnemi().start();
-                avionEnnemis.add(a);
-
-                System.out.println(">>>>>>>>>>>> nmr ennemis >>>>>>>>>" + avionEnnemis.size());
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
+//        if (avionEnnemis.size() < 5) {
+//        Random random = new Random();
+        while (StartingClass.avion.vie != 0) {
+            
+            AvionEnnemi a = AvionEnnemi.newEnnemi();
+            a.getMoveAvionEnnemi().start();
+            avionEnnemis.add(a);
+            
+            System.out.println(">>>>>>>>>>>> nbr ennemis >>>>>>>>>" + avionEnnemis.size());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
             }
-
         }
+//        }
 
     }
 

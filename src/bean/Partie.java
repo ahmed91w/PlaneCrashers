@@ -13,6 +13,7 @@ public class Partie {
 
     private Niveau niveau;
     private BossEnnemi boss;
+    private long score;
 
     public void startPartie(int choix) {
         if (choix == 1) {

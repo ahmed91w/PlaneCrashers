@@ -65,21 +65,23 @@ public class Avion {
 
     public void shoot() {
         Projectile p = new Projectile(centerX + 24, centerY - 10);
+//        p.getMoveProj().start();
         projectiles.add(p);
+//        p.getMoveProj().start();
 
     }
-
-    public void removeShoot() {
-        for (int i = 0; i < projectiles.size(); i++) {
-            if (projectiles.get(i).getY() <= 0) {
-                System.out.println("Suppression du projectile a y=" + projectiles.get(i).getY());
-                projectiles.remove(i);
-
-            }
-
-        }
-
-    }
+//
+//    public void removeShoot() {
+//        for (int i = 0; i < projectiles.size(); i++) {
+//            if (projectiles.get(i).getY() <= 0) {
+//                System.out.println("Suppression du projectile a y=" + projectiles.get(i).getY());
+//                projectiles.remove(i);
+//
+//            }
+//
+//        }
+//
+//    }
 
     public void up() {
         vitesseY = -6;

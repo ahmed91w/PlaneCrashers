@@ -19,15 +19,16 @@ import jetGame.StartingClass;
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  */
-public class Projectile implements Runnable {
+public class Projectile {
 
     private int x, y, vitesseY;
     private Image bullet;
     private Rectangle r = new Rectangle();
-    private Thread moveProj;
+//    private Thread moveProj;
     public static StartingClass startingClass;
 
     public Projectile() {
+        r.setBounds(this.x, this.y, 5, 20);
     }
 
     public Projectile(int x, int y) {
@@ -35,32 +36,42 @@ public class Projectile implements Runnable {
         this.x = x;
         this.y = y;
         vitesseY = 1;
-        moveProj = new Thread(this);
+//        moveProj = new Thread(this);
         bullet = toolkit.getImage("src/resources/tire1.png");
+        r.setBounds(this.x, this.y, 5, 20);
+
     }
 
     public void update() {
         vitesseY = 7;
         y -= vitesseY;
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>projectil se deplace");
-        if (y < 0) {
-            //arrete du thread
-            this.moveProj.stop();
-
-            System.out.println("----------Projectil stoped");
-        }
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>projectil se deplace a " + y);
+//        if (y < 0) {
+//            //arrete du thread
+////            this.moveProj.stop();
+//            StartingClass.avion.projectiles.remove(this);
+//            System.out.println("----------Projectil stoped");
+//        }
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>> Y " + y);
-        r.setBounds(this.x, this.y, 40, 40);
+        r.setBounds(this.x, this.y, 10, 10);
         //checkCollision(AvionEnnemi.r);
 
+    }
+
+    public Rectangle getR() {
+        return r;
+    }
+
+    public void setR(Rectangle r) {
+        this.r = r;
     }
 
     public void updateProjectileEnnemi() {
         vitesseY = 3;
         y += vitesseY;
         if (y > 700) {
-            this.moveProj.stop();
+//            this.moveProj.stop();
         }
 
     }
@@ -97,35 +108,33 @@ public class Projectile implements Runnable {
         this.bullet = bullet;
     }
 
-//    public void checkCollision(Rectangle rect) {
-//        if (rect.intersects(this.r)) {
-//            System.out.println("Collision detected![Projectile]");
-//            visible = false;
-//        }
-//    }
+    public void checkCollision(Rectangle rect) {
+        if (rect.intersects(this.r)) {
+            System.out.println("Collision detected![Projectile]");
 
-
-    @Override
-    public void run() {
-
-        update();
-//        updateProjectileEnnemi();
-        try {
-            Thread.sleep(500);
-//To change body of generated methods, choose Tools | Templates.
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Projectile.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
-    public Thread getMoveProj() {
-        return moveProj;
-    }
-
-    public void setMoveProj(Thread moveProj) {
-        this.moveProj = moveProj;
-    }
+//    @Override
+//    public void run() {
+//
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>thread Projectil");
+//        update();
+//
+//        try {
+//            Thread.sleep(500);
+//
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(Projectile.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
+//    public Thread getMoveProj() {
+//        return moveProj;
+//    }
+//
+//    public void setMoveProj(Thread moveProj) {
+//        this.moveProj = moveProj;
+//    }
 
     public static StartingClass getStartingClass() {
         return startingClass;
