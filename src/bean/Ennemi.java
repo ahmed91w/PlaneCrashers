@@ -51,7 +51,7 @@ public class Ennemi {
                 }
             }
 
-            follow();
+//            follow();
             r.setBounds(centerX, centerY, 69, 60);
         } else {
             this.setCenterX(this.getCenterX() + 5);

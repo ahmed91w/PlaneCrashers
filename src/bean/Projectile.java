@@ -38,7 +38,6 @@ public class Projectile {
         vitesseY = 1;
 //        moveProj = new Thread(this);
         bullet = toolkit.getImage("src/resources/tire1.png");
-        r.setBounds(this.x, this.y, 5, 20);
 
     }
 
@@ -46,16 +45,10 @@ public class Projectile {
         vitesseY = 7;
         y -= vitesseY;
         System.out.println(">>>>>>>>>>>>>>>>>>>>>projectil se deplace a " + y);
-//        if (y < 0) {
-//            //arrete du thread
-////            this.moveProj.stop();
-//            StartingClass.avion.projectiles.remove(this);
-//            System.out.println("----------Projectil stoped");
-//        }
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>> Y " + y);
-        r.setBounds(this.x, this.y, 10, 10);
-        //checkCollision(AvionEnnemi.r);
+        r.setBounds(this.x, this.y, 10, 20);
+        System.out.println("BOUNDS OF RECT PROJECTILES X");
 
     }
 
@@ -108,12 +101,14 @@ public class Projectile {
         this.bullet = bullet;
     }
 
-    public void checkCollision(Rectangle rect) {
-        if (rect.intersects(this.r)) {
+    public boolean checkCollision(Rectangle rect) {
+        if (rect.intersects(r)) {
             System.out.println("Collision detected![Projectile]");
-
+            return true;
         }
+        return false;
     }
+
 //    @Override
 //    public void run() {
 //
@@ -135,7 +130,6 @@ public class Projectile {
 //    public void setMoveProj(Thread moveProj) {
 //        this.moveProj = moveProj;
 //    }
-
     public static StartingClass getStartingClass() {
         return startingClass;
     }

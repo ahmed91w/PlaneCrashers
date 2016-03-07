@@ -8,6 +8,7 @@ package jetGame;
 import bean.ArrierePlan;
 import bean.Attack;
 import bean.Avion;
+import bean.AvionEnnemi;
 import bean.BossEnnemi;
 import bean.Joueur;
 import bean.Niveau;
@@ -21,8 +22,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.nio.file.ClosedWatchServiceException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -111,7 +112,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         Thread attackThread = new Thread(attack);
         attackThread.start();
         try {
-            attackThread.sleep(500);
+            attackThread.sleep(3000);
 
         } catch (InterruptedException ex) {
             Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,14 +122,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             bossEnnemi.update();
             shootBoss = new Thread(bossEnnemi);
             shootBoss.start();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-//        shootThread.start();
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @Override
@@ -147,20 +147,28 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 }
 //Verifier l activation du BOSS
                 if (niveau.getDifficulte() == 3) {
+
                     System.out.println(" >>>>>>>>>>>>>>>> " + BossEnnemi.projectiles.size());
                     for (int i = 0; i < BossEnnemi.projectiles.size(); i++) {
 
                         System.out.println("updating shoot Boss");
                         BossEnnemi.projectiles.get(i).updateProjectileEnnemi();
 
+                        bossEnnemi.update();
                     }
-                    bossEnnemi.update();
+
+                    if (checkBOSScolision()) {
+                        removeProjectil();
+                    }
+
+                    if (checkBossProjectilcolision()) {
+                        removeBossProjectiles();
+                    }
                 }
 
                 for (int i = 0; i < Avion.projectiles.size(); i++) {
                     avion.getProjectiles().get(i).update();
                 }
-
                 bg1.update();
                 bg2.update();
 
@@ -169,6 +177,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                     removeProjectil();
                 }
 
+                if (checkcolision()) {
+                    removeEnnemisOverLimitte();
+                }
+                removeEnnemisOverLimitte();
                 repaint();
                 try {
                     Thread.sleep(15);
@@ -305,13 +317,20 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             g.drawRect(p.getX(), p.getY(), 5, 20);
         }
         if (niveau.getDifficulte() == 3) {
-            g.drawImage(boss, bossEnnemi.getCenterX(), bossEnnemi.getCenterY(), this);
+            if (bossEnnemi.getCurrentHealth() != 0) {
+                g.drawImage(boss, bossEnnemi.getCenterX(), bossEnnemi.getCenterY(), this);
+                g.drawRect(bossEnnemi.getCenterX(), bossEnnemi.getCenterY(), 130, 240);
+
+            } else if (bossEnnemi.getCurrentHealth() == 0) {
+                g.drawImage(boss, bossEnnemi.getCenterX() - 2, bossEnnemi.getCenterY() - 2, this);
+                g.drawRect(bossEnnemi.getCenterX(), bossEnnemi.getCenterY(), 130, 240);
+            }
 
             for (int i = 0; i < BossEnnemi.projectiles.size(); i++) {
 
                 System.out.println("drawing shoot Boss");
                 g.drawImage(getImage(getCodeBase(), "res/tiremal.png"), BossEnnemi.projectiles.get(i).getX(), BossEnnemi.projectiles.get(i).getY(), this);
-
+                g.drawRect(BossEnnemi.projectiles.get(i).getX(), BossEnnemi.projectiles.get(i).getY(), 10, 10);
             }
         }
 
@@ -329,6 +348,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         g.drawRect(avion.getCenterX(), avion.getCenterY(), 48, 87);
         g.drawString("Player " + joueur.getNom(), 1200, 40);
         g.drawString("SCORE " + score, 1200, 80);
+
+//        g.draw3DRect(1000, 80, 150, 20, true);
     }
 
     public static ArrierePlan getBg1() {
@@ -339,7 +360,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         return bg2;
     }
 
-    public synchronized void removeProjectil() {
+    public void removeProjectil() {
+//        synchronized (avion.getProjectiles()) {
         System.out.println("REMOVE  PROJECTILS");
         System.out.println(">>>>>>>>>>>>>> SIZE PROJECTILES " + avion.getProjectiles().size());
         for (int i = 0; i < avion.getProjectiles().size(); i++) {
@@ -347,10 +369,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 avion.getProjectiles().remove(i);
             }
         }
-        notifyAll();
+//        }
+
     }
 
-    public synchronized void checkAvionColision() {
+    public void checkAvionColision() {
+//        synchronized (Attack.getAvionEnnemis()) {
+
         System.out.println("CHECK COLLISION");
         System.out.println(">>>>>>>>>>>>>> SIZE AVION ENNEMIS " + Attack.getAvionEnnemis().size());
         for (int i = 0; i < Attack.getAvionEnnemis().size(); i++) {
@@ -360,11 +385,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 Avion.vie -= 1;
             }
         }
-        notifyAll();
+//        }
+
     }
 
-    public synchronized boolean checkcolision() {
+    public boolean checkcolision() {
 
+//        synchronized(list){
+//            //traitement
+//           
+//            
+//        }
         System.out.println("CHECK COLLISION");
         System.out.println(">>>>>>>>>>>>>> SIZE AVION ENNEMIS " + Attack.getAvionEnnemis().size());
         System.out.println(">>>>>>>>>>>>>> SIZE PROJECTILES " + avion.getProjectiles().size());
@@ -398,7 +429,69 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             }
 
         }
-        notifyAll();
+
         return false;
     }
+
+    public boolean checkBOSScolision() {
+//        synchronized (avion.getProjectiles()) {
+        for (int j = 0; j < avion.getProjectiles().size(); j++) {
+            if (avion.getProjectiles().get(j).checkCollision(bossEnnemi.getR())) {
+                avion.getProjectiles().remove(j);
+                if (bossEnnemi.getCurrentHealth() > 0) {
+                    bossEnnemi.setCurrentHealth(bossEnnemi.getCurrentHealth() - 1);
+                }
+
+                return true;
+            }
+        }
+
+//        }
+        return false;
+    }
+
+    public boolean checkBossProjectilcolision() {
+//        synchronized (bossEnnemi.getProjectiles()) {
+        for (int j = 0; j < bossEnnemi.getProjectiles().size(); j++) {
+            if (bossEnnemi.getProjectiles().get(j).checkCollision(avion.getR())) {
+                bossEnnemi.getProjectiles().remove(j);
+                if (avion.vie > 0) {
+                    avion.vie -= 1;
+                }
+
+                return true;
+            }
+//            }
+
+        }
+
+        return false;
+    }
+
+    public void removeBossProjectiles() {
+//        synchronized (bossEnnemi.getProjectiles()) {
+        for (int i = 0; i < bossEnnemi.getProjectiles().size(); i++) {
+            if (bossEnnemi.getProjectiles().get(i).getY() > 700) {
+                bossEnnemi.getProjectiles().remove(i);
+            }
+        }
+
+//        }
+    }
+
+    public static void removeEnnemisOverLimitte() {
+
+//        synchronized (Attack.getAvionEnnemis()) {
+        System.out.println("NOMBRE ENNEMIS --->" + Attack.getAvionEnnemis().size());
+        for (int i = 0; i < Attack.getAvionEnnemis().size(); i++) {
+            if (Attack.getAvionEnnemis().get(i).getCenterY() > 700) {
+                Attack.getAvionEnnemis().get(i).getMoveAvionEnnemi().stop();
+                Attack.getAvionEnnemis().remove(i);
+            }
+
+        }
+
+//        }
+    }
+
 }

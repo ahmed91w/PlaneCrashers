@@ -6,6 +6,7 @@
 package bean;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import jetGame.StartingClass;
@@ -20,33 +21,44 @@ public class BossEnnemi extends Ennemi implements Runnable {
 
     public static List<Projectile> projectiles = new ArrayList<>();
 
-    private Thread moveLeft;
-
-    private Thread moveRight;
-
     public BossEnnemi() {
         maxHealth = 20;
         currentHealth = maxHealth;
-        vitesse = 4;
+        vitesse = 2;
         this.setCenterX(600);
         this.setCenterY(0);
+        this.getR().setBounds(this.getCenterX(), this.getCenterY(), 150, 80);
 
     }
 
     @Override
-    public void update() {
-        follow();
-        if (vitesse > 0) {
-            if (this.getCenterX() < 1300) {
-                this.setCenterX(this.getCenterX() + vitesse);
-                System.out.println("Boss x=" + this.getCenterX());
-            }
+    public boolean checkCollision(Rectangle rect) {
+        if (rect.intersects(this.getR())) {
+            System.out.println("BOSS Collision detected!");
+            return true;
+        }
+        return false;
+    }
 
-        } else if (vitesse < 0) {
-            if (this.getCenterX() > 10) {
-                this.setCenterX(this.getCenterX() + vitesse);
-                System.out.println("Boss x=" + this.getCenterX());
+    @Override
+    public void update() {
+        if (currentHealth == 0) {
+            destroy();
+        } else {
+            follow();
+            if (vitesse > 0) {
+                if (this.getCenterX() < 1300) {
+                    this.setCenterX(this.getCenterX() + vitesse);
+                    System.out.println("Boss x=" + this.getCenterX());
+                }
+
+            } else if (vitesse < 0) {
+                if (this.getCenterX() > 10) {
+                    this.setCenterX(this.getCenterX() + vitesse);
+                    System.out.println("Boss x=" + this.getCenterX());
+                }
             }
+            this.getR().setBounds(this.getCenterX(), this.getCenterY(), 130, 240);
         }
 
     }
@@ -55,9 +67,9 @@ public class BossEnnemi extends Ennemi implements Runnable {
     public void follow() {
 
         if (this.getCenterX() < StartingClass.avion.getCenterX()) {
-            vitesse = 4;
+            vitesse = 2;
         } else if (this.getCenterX() > StartingClass.avion.getCenterX()) {
-            vitesse = -4;
+            vitesse = -2;
         } else if (this.getCenterX() == StartingClass.avion.getCenterX()) {
             vitesse = 0;
             this.setCenterX(StartingClass.avion.getCenterX());
@@ -96,10 +108,10 @@ public class BossEnnemi extends Ennemi implements Runnable {
             System.out.println("thread shoot BOSSSSS");
 
             if (this.getCenterX() >= 1300) {
-                vitesse = -4;
+                vitesse = -2;
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>Vitesse " + vitesse);
             } else if (this.getCenterX() <= 10) {
-                vitesse = 4;
+                vitesse = 2;
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>>>Vitesse " + vitesse);
             }
 
@@ -114,6 +126,7 @@ public class BossEnnemi extends Ennemi implements Runnable {
     }
 
     public void shootMal() {
+        removeBossProjectiles();
         Projectile p = new Projectile(this.getCenterX() + 60, this.getCenterY() + 200);
 //        p.setVisible(true);
         projectiles.add(p);
@@ -142,4 +155,18 @@ public class BossEnnemi extends Ennemi implements Runnable {
 
     }
 
+    public void destroy() {
+        this.setCenterY(this.getCenterY() - 3);
+    }
+
+    public void removeBossProjectiles() {
+//        synchronized (bossEnnemi.getProjectiles()) {
+        for (int i = 0; i < this.getProjectiles().size(); i++) {
+            if (this.getProjectiles().get(i).getY() > 700) {
+                this.getProjectiles().remove(i);
+            }
+        }
+
+//        }
+    }
 }

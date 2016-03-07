@@ -56,7 +56,6 @@ public class AvionEnnemi extends Ennemi implements Runnable {
 //
 //        //checkCollision(Avion.collision);
 //    }
-
     public void destroy() {
         this.setDetruit(true);
         this.setImage(toolkit.getImage("src/res/explode.gif"));
@@ -93,19 +92,18 @@ public class AvionEnnemi extends Ennemi implements Runnable {
     @Override
     public void run() {
         while (this.getMoveAvionEnnemi().isAlive()) {
-            if (this.getCenterY() < 700) {
+//            if (this.getCenterY() < 700) {
                 update();
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
-            }
+//            }
 //            else {
 //                this.destroy();
 //                System.out.println("---------------> Ennemi auto-destroyed");
 //            }
-
         }
     }
 
