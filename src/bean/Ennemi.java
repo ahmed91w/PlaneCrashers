@@ -33,8 +33,6 @@ public class Ennemi {
 
     private Niveau niveau;
 
-    private Avion avion = StartingClass.avion;
-
     private Rectangle r = new Rectangle();
 
     public void update() {
@@ -51,7 +49,7 @@ public class Ennemi {
                 }
             }
 
-//            follow();
+            follow();
             r.setBounds(centerX, centerY, 69, 60);
         } else {
             this.setCenterX(this.getCenterX() + 5);
@@ -127,7 +125,7 @@ public class Ennemi {
     }
 
     public void shootMal() {
-        Projectile p = new Projectile(this.getCenterX() + 25, this.getCenterY() + 25);
+        Projectile p = new Projectile(this.getCenterX() + 25, this.getCenterY() + 25, true);
 //        p.setVisible(true);
         projectiles.add(p);
         System.out.println("nombre de shoot Ennemi " + projectiles.size());
@@ -176,14 +174,6 @@ public class Ennemi {
 
     public void setCanShoot(boolean canShoot) {
         this.canShoot = canShoot;
-    }
-
-    public Avion getAvion() {
-        return avion;
-    }
-
-    public void setAvion(Avion avion) {
-        this.avion = avion;
     }
 
     public Rectangle getR() {

@@ -11,38 +11,41 @@ package bean;
  */
 public class Partie {
 
-    private Niveau niveau;
+    private String joueur;
+    private String avion;
+    private Integer niveau;
     private BossEnnemi boss;
-    private long score;
+    private int score;
 
-    public void startPartie(int choix) {
-        if (choix == 1) {
-
-        } else if (choix == 2) {
-
-        } else if (choix == 3) {
-
-            boss = new BossEnnemi();
-            Thread bossThread = new Thread(boss);
-            bossThread.start();
-
-        }
+    public Partie(String joueur, String avion, Integer niveau) {
+        this.joueur = joueur;
+        this.avion = avion;
+        this.niveau = niveau;
+        this.score = 0;
     }
 
-    public Niveau getNiveau() {
+    public String getJoueur() {
+        return joueur;
+    }
+
+    public void setJoueur(String joueur) {
+        this.joueur = joueur;
+    }
+
+    public String getAvion() {
+        return avion;
+    }
+
+    public void setAvion(String avion) {
+        this.avion = avion;
+    }
+
+    public Integer getNiveau() {
         return niveau;
     }
 
-    public void setNiveau(Niveau niveau) {
+    public void setNiveau(Integer niveau) {
         this.niveau = niveau;
-    }
-
-    public BossEnnemi getBoss() {
-        return boss;
-    }
-
-    public void setBoss(BossEnnemi boss) {
-        this.boss = boss;
     }
 
 }

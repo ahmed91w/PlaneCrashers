@@ -24,8 +24,8 @@ public class AvionEnnemi extends Ennemi implements Runnable {
     private Thread moveAvionEnnemi;
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
 //    private boolean destroy = false;
-
     public AvionEnnemi(int x, int y) {
+        
         setCenterX(x);
         setCenterY(y);
         moveAvionEnnemi = new Thread(this);
@@ -60,7 +60,7 @@ public class AvionEnnemi extends Ennemi implements Runnable {
         this.setDetruit(true);
         this.setImage(toolkit.getImage("src/res/explode.gif"));
         try {
-            Thread.sleep(50);
+            Thread.sleep(1050);
         } catch (InterruptedException ex) {
             Logger.getLogger(AvionEnnemi.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -93,12 +93,12 @@ public class AvionEnnemi extends Ennemi implements Runnable {
     public void run() {
         while (this.getMoveAvionEnnemi().isAlive()) {
 //            if (this.getCenterY() < 700) {
-                update();
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
+            update();
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
 //            }
 //            else {
 //                this.destroy();

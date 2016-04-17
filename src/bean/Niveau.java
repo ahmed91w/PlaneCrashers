@@ -6,8 +6,7 @@
 package bean;
 
 import java.awt.Image;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Toolkit;
 
 /**
  *
@@ -15,33 +14,56 @@ import java.util.List;
  */
 public class Niveau {
 
-    private Image background;
+    private int vitt_ennemie;
+    private int nbr_ennemmie;
+    private boolean bosse;
+    private Image Background;
+    private Toolkit toolkit = Toolkit.getDefaultToolkit();
 
-    private int difficulte;
-
-    public Niveau(Image background, int difficulte) {
-        this.background = background;
-        this.difficulte = difficulte;
+    public Niveau(int vitt_ennemie, int nbr_ennemmie, boolean bosse, String Background) {
+        this.vitt_ennemie = vitt_ennemie;
+        this.nbr_ennemmie = nbr_ennemmie;
+        this.bosse = bosse;
+        this.Background = toolkit.getImage("src/res/" + Background);
     }
 
-    public Niveau(int difficulte) {
-        this.difficulte = difficulte;
+    public Niveau(int vitt_ennemie) {
+        this.vitt_ennemie = vitt_ennemie;
+    }
+
+    public Niveau() {
+    }
+
+    public int getVitt_ennemie() {
+        return vitt_ennemie;
+    }
+
+    public void setVitt_ennemie(int vitt_ennemie) {
+        this.vitt_ennemie = vitt_ennemie;
+    }
+
+    public int getNbr_ennemmie() {
+        return nbr_ennemmie;
+    }
+
+    public void setNbr_ennemmie(int nbr_ennemmie) {
+        this.nbr_ennemmie = nbr_ennemmie;
+    }
+
+    public boolean isBosse() {
+        return bosse;
+    }
+
+    public void setBosse(boolean bosse) {
+        this.bosse = bosse;
     }
 
     public Image getBackground() {
-        return background;
+        return Background;
     }
 
-    public void setBackground(Image background) {
-        this.background = background;
-    }
-
-    public int getDifficulte() {
-        return difficulte;
-    }
-
-    public void setDifficulte(int difficulte) {
-        this.difficulte = difficulte;
+    public void setBackground(Image Background) {
+        this.Background = Background;
     }
 
 }

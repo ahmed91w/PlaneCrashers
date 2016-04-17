@@ -41,7 +41,7 @@ public class Attack implements Runnable {
         for (int i = 0; i < avionEnnemis.size(); i++) {
 
             System.out.println("AVION ENEEMIS Y =>>>>>>>>>>>>>>>>>" + avionEnnemis.get(i).getCenterY());
-            if (avionEnnemis.get(i).getCenterY() >= 700) {
+            if (avionEnnemis.get(i).getCenterY() > 700) {
                 Attack.getAvionEnnemis().get(i).getMoveAvionEnnemi().stop();
                 System.out.println("ARRET DU THREAD AVION ENNEMI");
                 avionEnnemis.remove(i);

@@ -5,7 +5,9 @@
  */
 package bean;
 
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +21,7 @@ public class Avion {
 
     private int centerX = 600; //coordonnées
     private int centerY = 540; //coordonnées
-    private boolean hasMessile = true;
+
     public static int vie = 3;
 
     private int vitesseX = 0;
@@ -32,8 +34,19 @@ public class Avion {
 
     private static ArrierePlan bg1 = StartingClass.getBg1();
     private static ArrierePlan bg2 = StartingClass.getBg2();
-
+    private Image image;
+    private Toolkit toolkit = Toolkit.getDefaultToolkit();
     private Rectangle r = new Rectangle(0, 0, 0, 0);
+    private static int globalSpeed;
+
+    public Avion() {
+        image = toolkit.getImage("src/res/mini-plan1.png");
+    }
+
+    public Avion(String name, int vitesse) {
+        globalSpeed= vitesse;
+        image = toolkit.getImage("src/res/" + name + ".png");
+    }
 
     public void update() {
 
@@ -63,11 +76,17 @@ public class Avion {
 
     }
 
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
     public void shoot() {
-        Projectile p = new Projectile(centerX + 24, centerY - 10);
-//        p.getMoveProj().start();
+        Projectile p = new Projectile(centerX + 24, centerY - 10, false);
         projectiles.add(p);
-//        p.getMoveProj().start();
 
     }
 //
@@ -84,20 +103,20 @@ public class Avion {
 //    }
 
     public void up() {
-        vitesseY = -6;
+        vitesseY = -globalSpeed;
     }
 
     public void down() {
-        vitesseY = 6;
+        vitesseY = globalSpeed;
     }
 
     public void moveRight() {
-        vitesseX = 6;
+        vitesseX = globalSpeed;
 
     }
 
     public void moveLeft() {
-        vitesseX = -6;
+        vitesseX = -globalSpeed;
     }
 
     public void stopUP() {
@@ -183,14 +202,6 @@ public class Avion {
 
     public ArrayList<Projectile> getProjectiles() {
         return projectiles;
-    }
-
-    public boolean isHasMessile() {
-        return hasMessile;
-    }
-
-    public void setHasMessile(boolean hasMessile) {
-        this.hasMessile = hasMessile;
     }
 
     public Rectangle getR() {

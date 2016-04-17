@@ -45,7 +45,7 @@ public class BossEnnemi extends Ennemi implements Runnable {
         if (currentHealth == 0) {
             destroy();
         } else {
-            follow();
+
             if (vitesse > 0) {
                 if (this.getCenterX() < 1300) {
                     this.setCenterX(this.getCenterX() + vitesse);
@@ -58,6 +58,9 @@ public class BossEnnemi extends Ennemi implements Runnable {
                     System.out.println("Boss x=" + this.getCenterX());
                 }
             }
+
+            follow();
+
             this.getR().setBounds(this.getCenterX(), this.getCenterY(), 130, 240);
         }
 
@@ -72,7 +75,7 @@ public class BossEnnemi extends Ennemi implements Runnable {
             vitesse = -2;
         } else if (this.getCenterX() == StartingClass.avion.getCenterX()) {
             vitesse = 0;
-            this.setCenterX(StartingClass.avion.getCenterX());
+            this.setCenterX(StartingClass.avion.getCenterX() - 10);
         }
     }
 
@@ -127,10 +130,8 @@ public class BossEnnemi extends Ennemi implements Runnable {
 
     public void shootMal() {
         removeBossProjectiles();
-        Projectile p = new Projectile(this.getCenterX() + 60, this.getCenterY() + 200);
-//        p.setVisible(true);
+        Projectile p = new Projectile(this.getCenterX() + 60, this.getCenterY() + 200, true);
         projectiles.add(p);
-        System.out.println("nombre de shoot Boss " + projectiles.size());
 
     }
 
@@ -156,7 +157,7 @@ public class BossEnnemi extends Ennemi implements Runnable {
     }
 
     public void destroy() {
-        this.setCenterY(this.getCenterY() - 3);
+        this.setCenterY(this.getCenterY() - 2);
     }
 
     public void removeBossProjectiles() {
