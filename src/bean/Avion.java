@@ -23,7 +23,8 @@ public class Avion {
     private int centerX = 600; //coordonnées
     private int centerY = 540; //coordonnées
 
-    public static int vie = 3;
+    public static int vie;
+    public static int toucher;
 
     private int vitesseX = 0;
     private int vitesseY = 0;
@@ -55,6 +56,7 @@ public class Avion {
         image = toolkit.getImage("src/res/" + name + ".png");
         drawingimage = toolkit.getImage("src/res/" + name + ".png");
         if (name.equals("MiG-51S")) {
+            vie = 3;
             height = 48;
             width = 87;
             globalSpeed = 4;
@@ -63,6 +65,7 @@ public class Avion {
             imageMoveLeft = toolkit.getImage("src/res/moveLeft.png");
             imageMoveRight = toolkit.getImage("src/res/moveRight.png");
         } else if (name.equals("F_A-28A-mini")) {
+            vie = 5;
             height = 60;
             width = 89;
             globalSpeed = 6;
@@ -71,6 +74,7 @@ public class Avion {
             imageMoveLeft = image;
             imageMoveRight = image;
         } else if (name.equals("Su-51K-mini")) {
+            vie = 7;
             height = 80;
             width = 96;
             globalSpeed = 9;
@@ -79,6 +83,7 @@ public class Avion {
             imageMoveLeft = image;
             imageMoveRight = image;
         } else {
+            vie = 9;
             height = 48;
             width = 87;
             globalSpeed = 12;
@@ -88,6 +93,7 @@ public class Avion {
             imageMoveRight = image;
         }
 
+        toucher = vie * 3;
     }
 
     public void update() {
@@ -327,4 +333,6 @@ public class Avion {
             }
         }
     }
+
+  
 }

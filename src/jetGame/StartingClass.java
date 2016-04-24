@@ -256,12 +256,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
     }
 
     public void updateShootEnnemie() {
-        if (partie.getNiveau()==3 || partie.getNiveau()==4 ) {
-        for (int i = 0; i < Attack.avionEnnemis.size(); i++) {
-            Attack.avionEnnemis.get(i).updateAll();
-        }    
+        if (partie.getNiveau() == 3 || partie.getNiveau() == 4) {
+            for (int i = 0; i < Attack.avionEnnemis.size(); i++) {
+                Attack.avionEnnemis.get(i).updateAll();
+            }
         }
-        
+
     }
 
     public void drawShootEnnemie(Graphics g) {
@@ -352,8 +352,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
     }
 
     public void drawVie(Graphics g) {
-        switch (avion.vie) {
 
+        switch (avion.vie) {
             case 1:
                 g.drawImage(vieOn, 50, 570, this);
                 g.drawImage(vieOff, 90, 570, this);
@@ -368,6 +368,59 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
                 g.drawImage(vieOn, 50, 570, this);
                 g.drawImage(vieOn, 90, 570, this);
                 g.drawImage(vieOn, 130, 570, this);
+                break;
+            case 4:
+                g.drawImage(vieOn, 50, 570, this);
+                g.drawImage(vieOn, 90, 570, this);
+                g.drawImage(vieOn, 130, 570, this);
+                g.drawImage(vieOn, 170, 570, this);
+                break;
+            case 5:
+                g.drawImage(vieOn, 50, 570, this);
+                g.drawImage(vieOn, 90, 570, this);
+                g.drawImage(vieOn, 130, 570, this);
+                g.drawImage(vieOn, 170, 570, this);
+                g.drawImage(vieOn, 210, 570, this);
+
+                break;
+            case 6:
+                g.drawImage(vieOn, 50, 570, this);
+                g.drawImage(vieOn, 90, 570, this);
+                g.drawImage(vieOn, 130, 570, this);
+                g.drawImage(vieOn, 170, 570, this);
+                g.drawImage(vieOn, 210, 570, this);
+                g.drawImage(vieOn, 250, 570, this);
+
+                break;
+            case 7:
+                g.drawImage(vieOn, 50, 570, this);
+                g.drawImage(vieOn, 90, 570, this);
+                g.drawImage(vieOn, 130, 570, this);
+                g.drawImage(vieOn, 170, 570, this);
+                g.drawImage(vieOn, 210, 570, this);
+                g.drawImage(vieOn, 250, 570, this);
+                g.drawImage(vieOn, 290, 570, this);
+
+                break;
+            case 8:
+                g.drawImage(vieOn, 50, 570, this);
+                g.drawImage(vieOn, 90, 570, this);
+                g.drawImage(vieOn, 130, 570, this);
+                g.drawImage(vieOn, 170, 570, this);
+                g.drawImage(vieOn, 210, 570, this);
+                g.drawImage(vieOn, 250, 570, this);
+                g.drawImage(vieOn, 290, 570, this);
+
+                break;
+            case 9:
+                g.drawImage(vieOn, 50, 570, this);
+                g.drawImage(vieOn, 90, 570, this);
+                g.drawImage(vieOn, 130, 570, this);
+                g.drawImage(vieOn, 170, 570, this);
+                g.drawImage(vieOn, 210, 570, this);
+                g.drawImage(vieOn, 250, 570, this);
+                g.drawImage(vieOn, 290, 570, this);
+                g.drawImage(vieOn, 330, 570, this);
                 break;
 
         }

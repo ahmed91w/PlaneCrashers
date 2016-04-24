@@ -88,7 +88,7 @@ public class Attack implements Runnable {
             if (StartingClass.partie.getNiveau() == 3 || StartingClass.partie.getNiveau() == 4) {
                 startShooting(a);
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(250);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
