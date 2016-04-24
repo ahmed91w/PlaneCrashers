@@ -5,13 +5,16 @@
  */
 package bean;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jetGame.StartingClass;
+import static jetGame.StartingClass.avion;
 import service.MediaPlayer;
 
 /**
@@ -24,13 +27,15 @@ public class Avion {
     private int centerY = 540; //coordonnées
 
     public static int vie;
-    public static int toucher;
+    public static int toucher = 0;
 
     private int vitesseX = 0;
     private int vitesseY = 0;
 
     private int height;
     private int width;
+
+    public static int type;
 
     public static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
@@ -43,6 +48,7 @@ public class Avion {
     private Image imageMoveDown;
     private Image imageMoveLeft;
     private Image imageMoveRight;
+    private Image vieOff, vieOn;
 
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
 
@@ -57,6 +63,7 @@ public class Avion {
         drawingimage = toolkit.getImage("src/res/" + name + ".png");
         if (name.equals("MiG-51S")) {
             vie = 3;
+            type = 1;
             height = 48;
             width = 87;
             globalSpeed = 4;
@@ -66,6 +73,7 @@ public class Avion {
             imageMoveRight = toolkit.getImage("src/res/moveRight.png");
         } else if (name.equals("F_A-28A-mini")) {
             vie = 5;
+            type = 2;
             height = 60;
             width = 89;
             globalSpeed = 6;
@@ -75,6 +83,7 @@ public class Avion {
             imageMoveRight = image;
         } else if (name.equals("Su-51K-mini")) {
             vie = 7;
+            type = 4;
             height = 80;
             width = 96;
             globalSpeed = 9;
@@ -84,6 +93,7 @@ public class Avion {
             imageMoveRight = image;
         } else {
             vie = 9;
+            type = 3;
             height = 48;
             width = 87;
             globalSpeed = 12;
@@ -93,7 +103,6 @@ public class Avion {
             imageMoveRight = image;
         }
 
-        toucher = vie * 3;
     }
 
     public void update() {
@@ -136,13 +145,21 @@ public class Avion {
     }
 
     public void shoot() {
-        Projectile p = new Projectile(centerX + 24, centerY - 10, false);
-        projectiles.add(p);
+        if (type == 4) {
+            Projectile p1 = new Projectile(centerX + 65, centerY + 30, false);
+            Projectile p2 = new Projectile(centerX + 10, centerY + 30, false);
+            projectiles.add(p1);
+            projectiles.add(p2);
+
+        } else {
+            Projectile p = new Projectile(centerX + 24, centerY - 10, false);
+            projectiles.add(p);
+        }
 
     }
 
     public void destroy() {
-        vie = vie - 1;
+        toucher();
         MediaPlayer.playSound("/sound/Explosion.wav");
         drawingimage = toolkit.getImage("src/res/explode.gif");
     }
@@ -334,5 +351,110 @@ public class Avion {
         }
     }
 
-  
+    public void toucher() {
+        toucher++;
+        if (toucher == 3) {
+            vie = vie - 1;
+            toucher = 0;
+        }
+    }
+
+    public void drawVie(Graphics g, ImageObserver img) {
+        switch (vie) {
+            case 1:
+                g.drawImage(vieOn, 50, 570, img);
+//                g.drawImage(vieOff, 90, 570, img);
+//                g.drawImage(vieOff, 130, 570, img);
+                break;
+            case 2:
+                g.drawImage(vieOn, 50, 570, img);
+                g.drawImage(vieOn, 90, 570, img);
+//                g.drawImage(vieOff, 130, 570, img);
+                break;
+            case 3:
+                g.drawImage(vieOn, 50, 570, img);
+                g.drawImage(vieOn, 90, 570, img);
+                g.drawImage(vieOn, 130, 570, img);
+                break;
+            case 4:
+                g.drawImage(vieOn, 50, 570, img);
+                g.drawImage(vieOn, 90, 570, img);
+                g.drawImage(vieOn, 130, 570, img);
+                g.drawImage(vieOn, 170, 570, img);
+                break;
+            case 5:
+                g.drawImage(vieOn, 50, 570, img);
+                g.drawImage(vieOn, 90, 570, img);
+                g.drawImage(vieOn, 130, 570, img);
+                g.drawImage(vieOn, 170, 570, img);
+                g.drawImage(vieOn, 210, 570, img);
+
+                break;
+            case 6:
+                g.drawImage(vieOn, 50, 570, img);
+                g.drawImage(vieOn, 90, 570, img);
+                g.drawImage(vieOn, 130, 570, img);
+                g.drawImage(vieOn, 170, 570, img);
+                g.drawImage(vieOn, 210, 570, img);
+                g.drawImage(vieOn, 250, 570, img);
+
+                break;
+            case 7:
+                g.drawImage(vieOn, 50, 570, img);
+                g.drawImage(vieOn, 90, 570, img);
+                g.drawImage(vieOn, 130, 570, img);
+                g.drawImage(vieOn, 170, 570, img);
+                g.drawImage(vieOn, 210, 570, img);
+                g.drawImage(vieOn, 250, 570, img);
+                g.drawImage(vieOn, 290, 570, img);
+
+                break;
+            case 8:
+                g.drawImage(vieOn, 50, 570, img);
+                g.drawImage(vieOn, 90, 570, img);
+                g.drawImage(vieOn, 130, 570, img);
+                g.drawImage(vieOn, 170, 570, img);
+                g.drawImage(vieOn, 210, 570, img);
+                g.drawImage(vieOn, 250, 570, img);
+                g.drawImage(vieOn, 290, 570, img);
+
+                break;
+            case 9:
+                g.drawImage(vieOn, 50, 570, img);
+                g.drawImage(vieOn, 90, 570, img);
+                g.drawImage(vieOn, 130, 570, img);
+                g.drawImage(vieOn, 170, 570, img);
+                g.drawImage(vieOn, 210, 570, img);
+                g.drawImage(vieOn, 250, 570, img);
+                g.drawImage(vieOn, 290, 570, img);
+                g.drawImage(vieOn, 330, 570, img);
+                break;
+
+        }
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public Image getVieOff() {
+        return vieOff;
+    }
+
+    public void setVieOff(Image vieOff) {
+        this.vieOff = vieOff;
+    }
+
+    public Image getVieOn() {
+        return vieOn;
+    }
+
+    public void setVieOn(Image vieOn) {
+        this.vieOn = vieOn;
+    }
+
 }

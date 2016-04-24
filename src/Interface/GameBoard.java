@@ -21,6 +21,8 @@ import service.MediaPlayer;
  */
 public class GameBoard extends javax.swing.JFrame {
 
+    static long tStart;
+
     /**
      * Creates new form Login
      */
@@ -503,6 +505,7 @@ public class GameBoard extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        tStart = System.currentTimeMillis();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -512,6 +515,13 @@ public class GameBoard extends javax.swing.JFrame {
         });
     }
 
+    public double tempsEcouler() {
+
+        long tEnd = System.currentTimeMillis();
+        long tDelta = tEnd - tStart;
+        double elapsedSeconds = tDelta / (60 * 1000.0);
+        return elapsedSeconds;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;

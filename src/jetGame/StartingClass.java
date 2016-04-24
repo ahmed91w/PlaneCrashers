@@ -23,6 +23,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.ImageObserver;
 import javafx.application.Platform;
 import javax.swing.JFrame;
 import service.MediaPlayer;
@@ -38,7 +39,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
     public static Partie partie;
     public static Attack attack;
 
-    private Image image, vieOff, vieOn, socreboard;
+    private Image image, vieOff, vieOn, vieOn1on3, vieOn2On3, socreboard;
     private static ArrierePlan bg1, bg2;
     private Graphics second;
 
@@ -57,6 +58,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
         socreboard = toolkit.getImage("src/res/score.png");
         vieOff = toolkit.getImage("src/res/nbr-vie-off.png");
         vieOn = toolkit.getImage("src/res/nbr-vieON.png");
+        vieOn1on3 = toolkit.getImage("src/res/nbr-vieOn1_3");
+        vieOn2On3 = toolkit.getImage("src/res/nbr-vieOn2_3");
 
 //        boss = toolkit.getImage("src/res/Boss B-3.mini.png");
     }
@@ -202,8 +205,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
                 avion.setDrawingimage(avion.getImage());
                 break;
             case KeyEvent.VK_SPACE:
-                avion.shoot();
-                MediaPlayer.playSound("/sound/weapon_player.wav");
+                if (avion.vie != 0) {
+                    avion.shoot();
+                    MediaPlayer.playSound("/sound/weapon_player.wav");
+                }
                 break;
 
         }
@@ -218,6 +223,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
 
     public void gameOver() {
         attackThread.stop();
+
         bg1.setBackground(toolkit.getImage("src/res/gameoverbg.png"));
         bg2.setBackground(toolkit.getImage("src/res/gameoverbg.png"));
         bg1.update();
@@ -289,7 +295,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
     @Override
     public void paint(Graphics g) {
         drawBackground(g);
-        drawVie(g);
+//        drawVie(g);
+        drawNbrVie(g, vieOn, this, avion.vie);
+
         drawProjectilles(g);
         drawEnnemis(g);
         drawAvion(g);
@@ -327,10 +335,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
     }
 
     public void drawProjectilles(Graphics g) {
-        for (int i = 0; i < avion.getProjectiles().size(); i++) {
-            Projectile p = (Projectile) avion.getProjectiles().get(i);
-            g.drawImage(p.getBullet(), p.getX(), p.getY(), this);
-            g.drawRect(p.getX(), p.getY(), 5, 20);
+        if (avion.vie != 0) {
+            for (int i = 0; i < avion.getProjectiles().size(); i++) {
+                Projectile p = (Projectile) avion.getProjectiles().get(i);
+                g.drawImage(p.getBullet(), p.getX(), p.getY(), this);
+                g.drawRect(p.getX(), p.getY(), 5, 20);
+            }
         }
     }
 
@@ -436,5 +446,18 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
             g.drawImage(avion.getDrawingimage(), avion.getCenterX(), avion.getCenterY(), this);
             g.drawRect(avion.getCenterX(), avion.getCenterY(), avion.getHeight(), avion.getWidth());
         }
+    }
+
+    public void drawNbrVie(Graphics g, Image img, ImageObserver io, int nbr) {
+        int distance = 0;
+        for (int i = 0; i < nbr; i++) {
+            g.drawImage(img, 50 + distance, 570, io);
+            distance += 40;
+        }
+    }
+
+    public void drawVieOff(Graphics g, ImageObserver io) {
+        int distance = 0;
+       
     }
 }
