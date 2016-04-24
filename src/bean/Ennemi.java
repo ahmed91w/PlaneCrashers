@@ -35,12 +35,13 @@ public class Ennemi {
 
     private Rectangle r = new Rectangle();
 
+
     public void update() {
         if (detruit == false) {
             centerY -= vitesseY;
-            vitesseY = -4;
+            vitesseY = -StartingClass.partie.getNiveau();
             if (vitesseX > 0) {
-                if (this.getCenterX() < 1200) {
+                if (this.getCenterX() < 1270) {
                     this.setCenterX(this.getCenterX() + vitesseX);
                 }
             } else if (vitesseX < 0) {
@@ -48,15 +49,15 @@ public class Ennemi {
                     this.setCenterX(this.getCenterX() + vitesseX);
                 }
             }
+            if (StartingClass.partie.getNiveau() == 3 || StartingClass.partie.getNiveau() == 4) {
+                follow();
+            }
 
-            follow();
             r.setBounds(centerX, centerY, 69, 60);
-        } else {
-            this.setCenterX(this.getCenterX() + 5);
-            this.setCenterY(this.getCenterY() + 1);
-        }
 
-        //checkCollision(Avion.collision);
+//           collisionWithAvion(StartingClass.avion);
+        }
+       
     }
 
     public void follow() {
@@ -128,20 +129,24 @@ public class Ennemi {
         Projectile p = new Projectile(this.getCenterX() + 25, this.getCenterY() + 25, true);
 //        p.setVisible(true);
         projectiles.add(p);
-        System.out.println("nombre de shoot Ennemi " + projectiles.size());
-
+       
     }
 
     public boolean checkCollision(Rectangle rect) {
         if (rect.intersects(r)) {
-            System.out.println("ENEMIS Collision detected!");
-//            onFire = true;
-//            detruit = true;
+            
 
             return true;
 
         }
         return false;
+    }
+
+    public void collisionWithAvion(Avion a) {
+        if (checkCollision(StartingClass.avion.getR()) == true) {
+            System.out.println("VIE --");
+            StartingClass.avion.vie = StartingClass.avion.vie - 1;
+        }
     }
 
     public boolean isOnFire() {

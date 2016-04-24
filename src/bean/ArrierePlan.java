@@ -5,10 +5,13 @@
  */
 package bean;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jetGame.StartingClass;
 
 /**
  *
@@ -18,11 +21,14 @@ public class ArrierePlan {
 
     private int bgX, bgY;
     private int vitesseY;//vitesse de defilement
+    private Image background;
+    private Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     public ArrierePlan(int x, int y) {
         this.bgX = x;
         this.bgY = y;
-        this.vitesseY = -1;
+        this.vitesseY = -StartingClass.partie.getNiveau();
+        background = toolkit.getImage("src/res/warshipsBackground-Récupéré.jpg");
     }
 
     public void update() {
@@ -54,6 +60,14 @@ public class ArrierePlan {
 
     public void setVitesseY(int vitesseY) {
         this.vitesseY = vitesseY;
+    }
+
+    public Image getBackground() {
+        return background;
+    }
+
+    public void setBackground(Image background) {
+        this.background = background;
     }
 
 }

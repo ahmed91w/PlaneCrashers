@@ -15,7 +15,7 @@ public class Partie {
     private String avion;
     private Integer niveau;
     private BossEnnemi boss;
-    private int score;
+    public static int score;
 
     public Partie(String joueur, String avion, Integer niveau) {
         this.joueur = joueur;

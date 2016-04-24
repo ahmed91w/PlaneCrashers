@@ -13,6 +13,7 @@ import java.io.File;
 import java.net.URL;
 import javax.swing.JFrame;
 import jetGame.StartingClass;
+import service.MediaPlayer;
 
 /**
  *
@@ -24,9 +25,9 @@ public class GameBoard extends javax.swing.JFrame {
      * Creates new form Login
      */
     public GameBoard() {
-        
+
         initComponents();
-        
+
     }
 
     /**
@@ -71,8 +72,7 @@ public class GameBoard extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setAlwaysOnTop(true);
-        setLocation(new java.awt.Point(0, 0));
+        setLocation(new java.awt.Point(300, 50));
         setMaximumSize(new java.awt.Dimension(1300, 600));
         setResizable(false);
 
@@ -100,6 +100,11 @@ public class GameBoard extends javax.swing.JFrame {
         buttonGroup2.add(jRadioButton5);
         jRadioButton5.setSelected(true);
         jRadioButton5.setText("MiG-51S");
+        jRadioButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRadioButton5MouseClicked(evt);
+            }
+        });
         jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton5ActionPerformed(evt);
@@ -136,7 +141,7 @@ public class GameBoard extends javax.swing.JFrame {
 
         jLabel7.setText("Vie");
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/mini-plan1.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/MiG-51S.png"))); // NOI18N
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel4MouseClicked(evt);
@@ -150,6 +155,11 @@ public class GameBoard extends javax.swing.JFrame {
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/Su-51K-mini.png"))); // NOI18N
 
         jButton1.setText("Commencer");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton1MouseEntered(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -157,6 +167,11 @@ public class GameBoard extends javax.swing.JFrame {
         });
 
         jButton2.setText("Quiter");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton2MouseEntered(evt);
+            }
+        });
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -350,7 +365,7 @@ public class GameBoard extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Partie p = getParams();
-       
+
         Session.setAttributes(p, "partie");
         final JFrame frame = new JFrame("Java OpenStreetMap Editor");
         StartingClass sc = new StartingClass();
@@ -358,11 +373,11 @@ public class GameBoard extends javax.swing.JFrame {
             public void appletResize(int w, int h) {
                 frame.setSize(w, h);
             }
-            
+
             public AppletContext getAppletContext() {
                 return null;
             }
-            
+
             public URL getCodeBase() {
                 try {
                     return new File(".").toURI().toURL();
@@ -371,56 +386,69 @@ public class GameBoard extends javax.swing.JFrame {
                     return null;
                 }
             }
-            
+
             public URL getDocumentBase() {
                 return getCodeBase();
             }
-            
+
             public String getParameter(String k) {
                 return null;
             }
-            
+
             public boolean isActive() {
                 return true;
             }
         });
-        
+        setLocation(0, 0);
         setSize(1360, 700);
+
         sc.init();
         sc.start();
+
         add(sc);
         remove(jPanel1);
-        
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
 
     }//GEN-LAST:event_jLabel4MouseClicked
-    
+
+    private void jButton1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseEntered
+        MediaPlayer.playSound("/sound/button_click.wav");
+    }//GEN-LAST:event_jButton1MouseEntered
+
+    private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseEntered
+        MediaPlayer.playSound("/sound/button_click.wav");
+    }//GEN-LAST:event_jButton2MouseEntered
+
+    private void jRadioButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton5MouseClicked
+        MediaPlayer.playSound("/sound/Menu_Select_00.wav");
+    }//GEN-LAST:event_jRadioButton5MouseClicked
+
     public String getSelectedAvion() {
         String avion = "";
         //selection de l avion
         if (jRadioButton5.isSelected()) {
             avion = "MiG-51S";
             System.out.println("Avion " + avion);
-            
+
         } else if (jRadioButton6.isSelected()) {
-            avion = "F/A-28A";
+            avion = "F_A-28A-mini";
             System.out.println("Avion " + avion);
-            
+
         } else if (jRadioButton7.isSelected()) {
             avion = "Su-55";
             System.out.println("Avion " + avion);
-            
+
         } else if (jRadioButton8.isSelected()) {
-            avion = "Su-51k";
+            avion = "Su-51K-mini";
             System.out.println("Avion " + avion);
-            
+
         }
         return avion;
     }
-    
+
     public Integer getSelectedLvl() {
         Integer lvl = 0;
 //choix du niveau
@@ -439,7 +467,7 @@ public class GameBoard extends javax.swing.JFrame {
         }
         return lvl;
     }
-    
+
     public Partie getParams() {
         String avion = getSelectedAvion();
         Integer lvl = getSelectedLvl();
@@ -517,4 +545,5 @@ public class GameBoard extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -5,15 +5,9 @@
  */
 package bean;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.text.StyledEditorKit;
 import jetGame.StartingClass;
 
 /**
@@ -30,31 +24,28 @@ public class Projectile {
     public Projectile(int x, int y, boolean isEnnemie) {
         this.x = x;
         this.y = y;
-        vitesseY = 1;
+
         if (isEnnemie) {
-            bullet = toolkit.getImage("src/res/tire1.png");
+            vitesseY = -(StartingClass.partie.getNiveau() + 3);
+            bullet = toolkit.getImage("src/res/tiremal.png");
         } else {
+            vitesseY = -6;
             bullet = toolkit.getImage("src/res/tire1.png");
         }
 
     }
 
     public void update() {
-        vitesseY = 2;
-        y -= vitesseY;
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>projectil se deplace a " + y);
+        if (y > 0) {
+            vitesseY = 2;
+            y -= vitesseY;
+            r.setBounds(this.x, this.y, 10, 20);
+           
 
-        System.out.println(">>>>>>>>>>>>>>>>>>>>> Y " + y);
-        r.setBounds(this.x, this.y, 10, 20);
-        System.out.println("BOUNDS OF RECT PROJECTILES X");
-
-        for (int i = 0; i < Attack.getAvionEnnemis().size(); i++) {
-            if (Attack.getAvionEnnemis().get(i).checkCollision(this.getR())) {
-                Attack.getAvionEnnemis().get(i).getMoveAvionEnnemi().stop();
-                Attack.getAvionEnnemis().remove(i);
-                removerThis();
-            }
+        } else {
+            StartingClass.avion.projectiles.remove(this);
         }
+
     }
 
     public Rectangle getR() {
@@ -66,18 +57,11 @@ public class Projectile {
     }
 
     public void updateProjectileEnnemi() {
-        vitesseY = 3;
-        y += vitesseY;
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>Y:" + y);
-//        if (this.getR().intersects(StartingClass.avion.getR())==true) {
-//            StartingClass.avion.vie--;
-//        }
-        if (y >= 700) {
-//           
-            removerThisBoss();
-            System.out.println("shoot removed");
-        }
-
+        if (y < 700) {
+            vitesseY = 4;
+            y += vitesseY;
+            r.setBounds(this.x, this.y, 10, 20);
+        } 
     }
 
     public int getX() {
@@ -130,31 +114,9 @@ public class Projectile {
 
     public boolean checkCollision(Rectangle rect) {
         if (rect.intersects(r)) {
-            System.out.println("Collision detected![Projectile]");
             return true;
         }
         return false;
     }
 
-//    @Override
-//    public void run() {
-//
-//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>thread Projectil");
-//        update();
-//
-//        try {
-//            Thread.sleep(500);
-//
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(Projectile.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//    }
-//    public Thread getMoveProj() {
-//        return moveProj;
-//    }
-//
-//    public void setMoveProj(Thread moveProj) {
-//        this.moveProj = moveProj;
-//    }
 }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jetGame.StartingClass;
+import service.MediaPlayer;
 
 /**
  *
@@ -27,25 +28,66 @@ public class Avion {
     private int vitesseX = 0;
     private int vitesseY = 0;
 
+    private int height;
+    private int width;
+
     public static ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
     private boolean movingUp = false;
     private boolean movingDown = false;
 
-    private static ArrierePlan bg1 = StartingClass.getBg1();
-    private static ArrierePlan bg2 = StartingClass.getBg2();
     private Image image;
+    private Image drawingimage;
+    private Image imageMoveUp;
+    private Image imageMoveDown;
+    private Image imageMoveLeft;
+    private Image imageMoveRight;
+
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
-    private Rectangle r = new Rectangle(0, 0, 0, 0);
+
+    private Rectangle r;
+
     private static int globalSpeed;
 
-    public Avion() {
-        image = toolkit.getImage("src/res/mini-plan1.png");
-    }
+    public Avion(String name) {
 
-    public Avion(String name, int vitesse) {
-        globalSpeed= vitesse;
+        r = new Rectangle(0, 0, 0, 0);
         image = toolkit.getImage("src/res/" + name + ".png");
+        drawingimage = toolkit.getImage("src/res/" + name + ".png");
+        if (name.equals("MiG-51S")) {
+            height = 48;
+            width = 87;
+            globalSpeed = 4;
+            imageMoveDown = toolkit.getImage("src/res/mini-plan1.png");
+            imageMoveUp = toolkit.getImage("src/res/mini-plan1-onMove.png");
+            imageMoveLeft = toolkit.getImage("src/res/moveLeft.png");
+            imageMoveRight = toolkit.getImage("src/res/moveRight.png");
+        } else if (name.equals("F_A-28A-mini")) {
+            height = 60;
+            width = 89;
+            globalSpeed = 6;
+            imageMoveDown = image;
+            imageMoveUp = image;
+            imageMoveLeft = image;
+            imageMoveRight = image;
+        } else if (name.equals("Su-51K-mini")) {
+            height = 80;
+            width = 96;
+            globalSpeed = 9;
+            imageMoveDown = image;
+            imageMoveUp = image;
+            imageMoveLeft = image;
+            imageMoveRight = image;
+        } else {
+            height = 48;
+            width = 87;
+            globalSpeed = 12;
+            imageMoveDown = image;
+            imageMoveUp = image;
+            imageMoveLeft = image;
+            imageMoveRight = image;
+        }
+
     }
 
     public void update() {
@@ -62,8 +104,7 @@ public class Avion {
         } else if (vitesseY < 0) { //si vitesseY est négative ==> deplacement en haut
             if (centerY > 20) {//pour ne pas depasser les bornes
                 centerY += vitesseY;
-                bg1.setVitesseY(-1);
-                bg2.setVitesseY(-1);
+
             }
 
         } else if (vitesseY > 0) { //si vitesseY est posetive ==> deplacement en bas
@@ -72,7 +113,11 @@ public class Avion {
             }
 
         }
-        r.setRect(centerX, centerY, 48, 87);
+        r.setRect(centerX, centerY, height, width);
+
+        if (StartingClass.partie.getNiveau() == 4) {
+            checkCollisionShootEnemie();
+        }
 
     }
 
@@ -89,18 +134,12 @@ public class Avion {
         projectiles.add(p);
 
     }
-//
-//    public void removeShoot() {
-//        for (int i = 0; i < projectiles.size(); i++) {
-//            if (projectiles.get(i).getY() <= 0) {
-//                System.out.println("Suppression du projectile a y=" + projectiles.get(i).getY());
-//                projectiles.remove(i);
-//
-//            }
-//
-//        }
-//
-//    }
+
+    public void destroy() {
+        vie = vie - 1;
+        MediaPlayer.playSound("/sound/Explosion.wav");
+        drawingimage = toolkit.getImage("src/res/explode.gif");
+    }
 
     public void up() {
         vitesseY = -globalSpeed;
@@ -212,4 +251,80 @@ public class Avion {
         this.r = r;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public Image getImageMoveUp() {
+        return imageMoveUp;
+    }
+
+    public void setImageMoveUp(Image imageMoveUp) {
+        this.imageMoveUp = imageMoveUp;
+    }
+
+    public Image getImageMoveDown() {
+        return imageMoveDown;
+    }
+
+    public void setImageMoveDown(Image imageMoveDown) {
+        this.imageMoveDown = imageMoveDown;
+    }
+
+    public Image getImageMoveLeft() {
+        return imageMoveLeft;
+    }
+
+    public void setImageMoveLeft(Image imageMoveLeft) {
+        this.imageMoveLeft = imageMoveLeft;
+    }
+
+    public Image getImageMoveRight() {
+        return imageMoveRight;
+    }
+
+    public void setImageMoveRight(Image imageMoveRight) {
+        this.imageMoveRight = imageMoveRight;
+    }
+
+    public static int getGlobalSpeed() {
+        return globalSpeed;
+    }
+
+    public Image getDrawingimage() {
+        return drawingimage;
+    }
+
+    public void setDrawingimage(Image drawingimage) {
+        this.drawingimage = drawingimage;
+    }
+
+    public static void setGlobalSpeed(int globalSpeed) {
+        Avion.globalSpeed = globalSpeed;
+    }
+
+    public void checkCollisionShootEnemie() {
+        for (int i = 0; i < Attack.avionEnnemis.size(); i++) {
+            for (int j = 0; j < Attack.avionEnnemis.get(i).getProjectiles().size(); j++) {
+                if (this.getR().intersects(Attack.avionEnnemis.get(i).getProjectiles().get(j).getR()) == true) {
+                    Attack.avionEnnemis.get(i).getProjectiles().remove(j);
+                    StartingClass.avion.destroy();
+
+                }
+
+            }
+        }
+    }
 }

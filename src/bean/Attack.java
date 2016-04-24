@@ -8,7 +8,10 @@ package bean;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jetGame.StartingClass;
+import service.MediaPlayer;
 
 /**
  *
@@ -16,7 +19,7 @@ import jetGame.StartingClass;
  */
 public class Attack implements Runnable {
 
-    private static List<AvionEnnemi> avionEnnemis = new ArrayList<>();
+    public static List<AvionEnnemi> avionEnnemis = new ArrayList<>();
 
     public Attack() {
 
@@ -34,48 +37,78 @@ public class Attack implements Runnable {
 
     }
 
-    public static void removeEnnemisOverLimitte() {
+    public void removeEnnemisOverLimitte() {
 
-//        synchronized (Attack.getAvionEnnemis()) {
-        System.out.println("NOMBRE ENNEMIS --->" + avionEnnemis.size());
         for (int i = 0; i < avionEnnemis.size(); i++) {
 
-            System.out.println("AVION ENEEMIS Y =>>>>>>>>>>>>>>>>>" + avionEnnemis.get(i).getCenterY());
-            if (avionEnnemis.get(i).getCenterY() > 700) {
-                Attack.getAvionEnnemis().get(i).getMoveAvionEnnemi().stop();
-                System.out.println("ARRET DU THREAD AVION ENNEMI");
+            if (avionEnnemis.get(i).getCenterY() >= 700) {
+                avionEnnemis.get(i).getMoveAvionEnnemi().stop();
                 avionEnnemis.remove(i);
             }
 
         }
 
-//        }
+    }
+
+    public static void stopAllEnnemi() {
+        for (int i = 0; i < avionEnnemis.size(); i++) {
+            if (avionEnnemis.get(i).getMoveAvionEnnemi().isAlive()) {
+                avionEnnemis.get(i).getMoveAvionEnnemi().stop();
+            }
+
+        }
+
+    }
+
+    public void startShooting(AvionEnnemi a) {
+
+        a.getShoot().shoot.start();
+        MediaPlayer.playSound("/sound/weapon_enemy.wav");
+        try {
+            a.getShoot().shoot.sleep(1500);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(AvionEnnemi.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void StopShoting(AvionEnnemi a) {
+        if (StartingClass.partie.getNiveau() == 3 || StartingClass.partie.getNiveau() == 4) {
+            a.getShoot().shoot.stop();
+        }
     }
 
     @Override
     public void run() {
-//        if (avionEnnemis.size() < 5) {
-//        Random random = new Random();
-//        while (StartingClass.avion.vie != 0) {
-//        synchronized (StartingClass.avion) {
-        removeEnnemisOverLimitte();
-        while (Attack.avionEnnemis.size() < 6) {
-
+        while (StartingClass.avion.vie != 0) {
+//            if (avionEnnemis.size() < StartingClass.partie.getNiveau()) {
             AvionEnnemi a = AvionEnnemi.newEnnemi();
             a.getMoveAvionEnnemi().start();
             avionEnnemis.add(a);
+            if (StartingClass.partie.getNiveau() == 3 || StartingClass.partie.getNiveau() == 4) {
+                startShooting(a);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
 
-            System.out.println(">>>>>>>>>>>> nbr ennemis >>>>>>>>>" + avionEnnemis.size());
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
+            } else if (StartingClass.partie.getNiveau() == 2) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             }
-        }
 
-//            notifyAll();
-//        }
-//        }
+//            }
+        }
     }
 
 }
