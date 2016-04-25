@@ -26,10 +26,10 @@ public class Projectile {
         this.y = y;
 
         if (isEnnemie) {
-            vitesseY = -(StartingClass.partie.getNiveau() + 3);
+            vitesseY = (StartingClass.partie.getNiveau() + 9);
             bullet = toolkit.getImage("src/res/tiremal.png");
         } else {
-            vitesseY = -6;
+            vitesseY = 9;
             bullet = toolkit.getImage("src/res/tire1.png");
         }
 
@@ -37,7 +37,7 @@ public class Projectile {
 
     public void update() {
         if (y > 0) {
-            vitesseY = 2;
+//            vitesseY = 9;
             y -= vitesseY;
             r.setBounds(this.x, this.y, 10, 20);
            
@@ -58,7 +58,7 @@ public class Projectile {
 
     public void updateProjectileEnnemi() {
         if (y < 700) {
-            vitesseY = 4;
+//            vitesseY = 4;
             y += vitesseY;
             r.setBounds(this.x, this.y, 10, 20);
         } 
