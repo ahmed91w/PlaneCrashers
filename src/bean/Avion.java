@@ -67,7 +67,7 @@ public class Avion {
             height = 48;
             width = 87;
             globalSpeed = 4;
-            imageMoveDown = toolkit.getImage("src/res/mini-plan1.png");
+            imageMoveDown = toolkit.getImage("src/res/MiG-51S.png");
             imageMoveUp = toolkit.getImage("src/res/mini-plan1-onMove.png");
             imageMoveLeft = toolkit.getImage("src/res/moveLeft.png");
             imageMoveRight = toolkit.getImage("src/res/moveRight.png");
@@ -82,21 +82,21 @@ public class Avion {
             imageMoveLeft = image;
             imageMoveRight = image;
         } else if (name.equals("Su-51K-mini")) {
-            vie = 7;
+            vie = 9;
             type = 4;
             height = 80;
             width = 96;
-            globalSpeed = 9;
+            globalSpeed = 12;
             imageMoveDown = image;
             imageMoveUp = image;
             imageMoveLeft = image;
             imageMoveRight = image;
         } else {
-            vie = 9;
+            vie = 7;
             type = 3;
             height = 48;
             width = 87;
-            globalSpeed = 12;
+            globalSpeed = 9;
             imageMoveDown = image;
             imageMoveUp = image;
             imageMoveLeft = image;
@@ -150,7 +150,6 @@ public class Avion {
             Projectile p2 = new Projectile(centerX + 10, centerY + 30, false);
             projectiles.add(p1);
             projectiles.add(p2);
-
         } else {
             Projectile p = new Projectile(centerX + 24, centerY - 10, false);
             projectiles.add(p);

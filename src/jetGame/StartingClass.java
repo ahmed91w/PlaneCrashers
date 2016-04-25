@@ -151,6 +151,18 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
 
     }
 
+    public void activateBoss() {
+        if (partie.score == 900) {//boss lvl 1
+
+        } else if (partie.score == 1900) {//boss lvl 2
+
+        } else if (partie.score == 2900) {//boss lvl 3
+
+        } else {//boss lvl 4
+
+        }
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) { //if (e.getKeyCode()==KeyEvent.VK_UP)
@@ -159,22 +171,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
                 avion.setDrawingimage(avion.getImageMoveUp());
                 break;
             case KeyEvent.VK_DOWN:
-
                 avion.setDrawingimage(avion.getImageMoveDown());
                 avion.down();
-
                 break;
             case KeyEvent.VK_LEFT:
-
                 avion.setDrawingimage(avion.getImageMoveLeft());
                 avion.moveLeft();
-
                 break;
             case KeyEvent.VK_RIGHT:
-
                 avion.setDrawingimage(avion.getImageMoveRight());
                 avion.moveRight();
-
                 break;
             case KeyEvent.VK_SPACE:
                 break;
@@ -295,25 +301,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
     @Override
     public void paint(Graphics g) {
         drawBackground(g);
-//        drawVie(g);
-        drawNbrVie(g, vieOn, this, avion.vie);
+
+        drawNbrVie(g, vieOn, avion.vie);
 
         drawProjectilles(g);
+
         drawEnnemis(g);
+
         drawAvion(g);
 
         g.drawString("Player " + partie.getJoueur(), 1200, 40);
         g.drawString("SCORE " + partie.score, 1200, 80);
 
         drawShootEnnemie(g);
-    }
-
-    public static ArrierePlan getBg1() {
-        return bg1;
-    }
-
-    public static ArrierePlan getBg2() {
-        return bg2;
     }
 
     public void niveauHaut() {
@@ -361,81 +361,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
         }
     }
 
-    public void drawVie(Graphics g) {
-
-        switch (avion.vie) {
-            case 1:
-                g.drawImage(vieOn, 50, 570, this);
-                g.drawImage(vieOff, 90, 570, this);
-                g.drawImage(vieOff, 130, 570, this);
-                break;
-            case 2:
-                g.drawImage(vieOn, 50, 570, this);
-                g.drawImage(vieOn, 90, 570, this);
-                g.drawImage(vieOff, 130, 570, this);
-                break;
-            case 3:
-                g.drawImage(vieOn, 50, 570, this);
-                g.drawImage(vieOn, 90, 570, this);
-                g.drawImage(vieOn, 130, 570, this);
-                break;
-            case 4:
-                g.drawImage(vieOn, 50, 570, this);
-                g.drawImage(vieOn, 90, 570, this);
-                g.drawImage(vieOn, 130, 570, this);
-                g.drawImage(vieOn, 170, 570, this);
-                break;
-            case 5:
-                g.drawImage(vieOn, 50, 570, this);
-                g.drawImage(vieOn, 90, 570, this);
-                g.drawImage(vieOn, 130, 570, this);
-                g.drawImage(vieOn, 170, 570, this);
-                g.drawImage(vieOn, 210, 570, this);
-
-                break;
-            case 6:
-                g.drawImage(vieOn, 50, 570, this);
-                g.drawImage(vieOn, 90, 570, this);
-                g.drawImage(vieOn, 130, 570, this);
-                g.drawImage(vieOn, 170, 570, this);
-                g.drawImage(vieOn, 210, 570, this);
-                g.drawImage(vieOn, 250, 570, this);
-
-                break;
-            case 7:
-                g.drawImage(vieOn, 50, 570, this);
-                g.drawImage(vieOn, 90, 570, this);
-                g.drawImage(vieOn, 130, 570, this);
-                g.drawImage(vieOn, 170, 570, this);
-                g.drawImage(vieOn, 210, 570, this);
-                g.drawImage(vieOn, 250, 570, this);
-                g.drawImage(vieOn, 290, 570, this);
-
-                break;
-            case 8:
-                g.drawImage(vieOn, 50, 570, this);
-                g.drawImage(vieOn, 90, 570, this);
-                g.drawImage(vieOn, 130, 570, this);
-                g.drawImage(vieOn, 170, 570, this);
-                g.drawImage(vieOn, 210, 570, this);
-                g.drawImage(vieOn, 250, 570, this);
-                g.drawImage(vieOn, 290, 570, this);
-
-                break;
-            case 9:
-                g.drawImage(vieOn, 50, 570, this);
-                g.drawImage(vieOn, 90, 570, this);
-                g.drawImage(vieOn, 130, 570, this);
-                g.drawImage(vieOn, 170, 570, this);
-                g.drawImage(vieOn, 210, 570, this);
-                g.drawImage(vieOn, 250, 570, this);
-                g.drawImage(vieOn, 290, 570, this);
-                g.drawImage(vieOn, 330, 570, this);
-                break;
-
-        }
-    }
-
     public void drawBackground(Graphics g) {
         g.drawImage(bg1.getBackground(), bg1.getBgX(), bg1.getBgY(), this);
         g.drawImage(bg2.getBackground(), bg2.getBgX(), bg2.getBgY(), this);
@@ -448,16 +373,28 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
         }
     }
 
-    public void drawNbrVie(Graphics g, Image img, ImageObserver io, int nbr) {
+    public void drawNbrVie(Graphics g, Image img, int nbr) {
         int distance = 0;
         for (int i = 0; i < nbr; i++) {
-            g.drawImage(img, 50 + distance, 570, io);
+            g.drawImage(img, 50 + distance, 570, this);
             distance += 40;
         }
     }
 
-    public void drawVieOff(Graphics g, ImageObserver io) {
-        int distance = 0;
-       
+    public static ArrierePlan getBg1() {
+        return bg1;
     }
+
+    public static void setBg1(ArrierePlan bg1) {
+        StartingClass.bg1 = bg1;
+    }
+
+    public static ArrierePlan getBg2() {
+        return bg2;
+    }
+
+    public static void setBg2(ArrierePlan bg2) {
+        StartingClass.bg2 = bg2;
+    }
+
 }
