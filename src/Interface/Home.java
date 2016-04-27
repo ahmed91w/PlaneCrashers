@@ -5,6 +5,8 @@
  */
 package Interface;
 
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import service.MediaPlayer;
 
 /**
@@ -14,13 +16,17 @@ import service.MediaPlayer;
 public class Home extends javax.swing.JFrame {
 
     private MediaPlayer mediaPlayer;
+    private Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     /**
      * Creates new form Home
      */
     public Home() {
         initComponents();
-        mediaPlayer.playSound("/sound/Music-loop-electronic.wav");
+        mediaPlayer.playSound("/sound/congratulations_1.wav");
+        jButton1.setOpaque(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setBorderPainted(false);
     }
 
     /**
@@ -35,6 +41,7 @@ public class Home extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -57,10 +64,13 @@ public class Home extends javax.swing.JFrame {
         jLabel2.setBounds(390, 170, 310, 80);
 
         jButton1.setFont(new java.awt.Font("Astron Boy Video", 1, 24)); // NOI18N
-        jButton1.setText("Start");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/StartButton.png"))); // NOI18N
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jButton1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton1MouseExited(evt);
             }
         });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -69,7 +79,16 @@ public class Home extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1);
-        jButton1.setBounds(400, 370, 250, 60);
+        jButton1.setBounds(420, 370, 200, 70);
+
+        jButton2.setText("Credit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2);
+        jButton2.setBounds(480, 480, 61, 23);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/startingbg.jpg"))); // NOI18N
         getContentPane().add(jLabel1);
@@ -87,7 +106,16 @@ public class Home extends javax.swing.JFrame {
 
     private void jButton1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseEntered
         MediaPlayer.playSound("/sound/button_click.wav");
+        jButton1.setIcon(new ImageIcon(toolkit.getImage("src/res/startButtonClicked.png")));
     }//GEN-LAST:event_jButton1MouseEntered
+
+    private void jButton1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseExited
+        jButton1.setIcon(new ImageIcon(toolkit.getImage("src/res/StartButton.png")));
+    }//GEN-LAST:event_jButton1MouseExited
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        new Credit().setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -128,6 +156,7 @@ public class Home extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

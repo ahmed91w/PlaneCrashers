@@ -33,10 +33,6 @@ public class Attack implements Runnable {
         Attack.avionEnnemis = avionEnnemis;
     }
 
-    public void revertAttack() {
-
-    }
-
     public void removeEnnemisOverLimitte() {
 
         for (int i = 0; i < avionEnnemis.size(); i++) {
@@ -82,6 +78,7 @@ public class Attack implements Runnable {
     public void run() {
         while (StartingClass.avion.vie != 0) {
 //            if (avionEnnemis.size() < StartingClass.partie.getNiveau()) {
+//            System.out.println("Still Runnung Attack !!!!");
             AvionEnnemi a = AvionEnnemi.newEnnemi();
             a.getMoveAvionEnnemi().start();
             avionEnnemis.add(a);
@@ -101,7 +98,7 @@ public class Attack implements Runnable {
                 }
             } else {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }

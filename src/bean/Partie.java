@@ -15,13 +15,13 @@ public class Partie {
     private String avion;
     private Integer niveau;
     private BossEnnemi boss;
-    public static int score;
+    public static int score=0;
 
     public Partie(String joueur, String avion, Integer niveau) {
         this.joueur = joueur;
         this.avion = avion;
         this.niveau = niveau;
-        this.score = 0;
+     
     }
 
     public String getJoueur() {

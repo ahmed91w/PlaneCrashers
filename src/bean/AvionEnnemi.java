@@ -24,14 +24,14 @@ import service.MediaPlayer;
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  */
 public class AvionEnnemi extends Ennemi implements Runnable {
-
+    
     private List<Projectile> projectiles;
     private Thread moveAvionEnnemi;
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
     private Shoot shoot;
     Random random = new Random();
     private int lv;
-
+    
     public AvionEnnemi(int x, int y) {
         lv = random.nextInt((3 - 1) + 1) + 1;
         setCenterX(x);
@@ -51,9 +51,9 @@ public class AvionEnnemi extends Ennemi implements Runnable {
         if (StartingClass.partie.getNiveau() == 3 || StartingClass.partie.getNiveau() == 4) {
             shoot = new Shoot(this);
         }
-
+        
     }
-
+    
     public void update() {
         if (isDetruit() == false) {
 //            getCenterY() -= getVitesseY();
@@ -81,16 +81,16 @@ public class AvionEnnemi extends Ennemi implements Runnable {
 
 //           collisionWithAvion(StartingClass.avion);
         }
-
+        
     }
-
+    
     public void destroy() {
         synchronized (moveAvionEnnemi) {
-
+            
             this.setDetruit(true);
             MediaPlayer.playSound("/sound/Explosion.wav");
             Image im = toolkit.getImage("src/res/explode.gif");
-
+            
             this.setImage(im);
             try {
                 moveAvionEnnemi.wait(150);
@@ -100,74 +100,80 @@ public class AvionEnnemi extends Ennemi implements Runnable {
             Attack.avionEnnemis.remove(this);
             moveAvionEnnemi.stop();
 
-            System.out.println("enemie Stooped");
+//            System.out.println("enemie Stooped");
         }
     }
-
+    
     public void startAvion() {
         this.update();
         moveAvionEnnemi.start();
     }
-
+    
     public void updateAll() {
         for (int i = 0; i < projectiles.size(); i++) {
             projectiles.get(i).updateProjectileEnnemi();
         }
     }
-
+    
     public void drawAll(Graphics g, ImageObserver imageObserver) {
         for (int i = 0; i < projectiles.size(); i++) {
             g.drawImage(projectiles.get(i).getBullet(), projectiles.get(i).getX(), projectiles.get(i).getY(), imageObserver);
         }
     }
-
+    
     public static AvionEnnemi newEnnemi() {
-
+        
         Random random = new Random();
         random.nextInt(1200);
-        AvionEnnemi ae = new AvionEnnemi(random.nextInt(1200), 0);
+        AvionEnnemi ae = new AvionEnnemi(random.nextInt(1200), -60);
         return ae;
     }
-
+    
     public void shoot() {
-
+        
         Projectile p = new Projectile(getCenterX() + 30, getCenterY() + 60, true);
         projectiles.add(p);
-
+        
     }
-
+    
     public List<Projectile> getProjectiles() {
         return projectiles;
     }
-
+    
     public void setProjectiles(List<Projectile> projectiles) {
         this.projectiles = projectiles;
     }
-
+    
     public Shoot getShoot() {
         return shoot;
     }
-
+    
     public void setShoot(Shoot shoot) {
         this.shoot = shoot;
     }
-
+    
     @Override
     public void run() {
         while (this.getMoveAvionEnnemi().isAlive()) {
             if (this.getCenterY() < 700) {
                 update();
-
+//                System.out.println("Still Runnung AVionEnnemi!!!!");
                 for (int i = 0; i < StartingClass.avion.getProjectiles().size(); i++) {
-                    if (StartingClass.avion.getProjectiles().get(i).checkCollision(this.getR())) {
+                    if (StartingClass.avion.getProjectiles().get(i).checkCollision(this.getR()) == true) {
                         StartingClass.partie.score += 10;
                         StartingClass.avion.getProjectiles().remove(i);
                         destroy();
                     }
                 }
                 if (this.getR().intersects(StartingClass.avion.getR()) == true) {
-                    StartingClass.avion.destroy();
-                    destroy();
+                    if (StartingClass.avion.getBouclier() == 0) {
+                        StartingClass.avion.destroy();
+                        destroy();
+                    } else {
+                        StartingClass.avion.setBouclier(StartingClass.avion.getBouclier() - 1);
+                        destroy();
+                    }
+                    
                 }
                 try {
                     Thread.sleep(50);
@@ -177,17 +183,17 @@ public class AvionEnnemi extends Ennemi implements Runnable {
             } else {
                 this.setDetruit(true);
                 moveAvionEnnemi.stop();
-               
+                
             }
         }
     }
-
+    
     public Thread getMoveAvionEnnemi() {
         return moveAvionEnnemi;
     }
-
+    
     public void setMoveAvionEnnemi(Thread moveAvionEnnemi) {
         this.moveAvionEnnemi = moveAvionEnnemi;
     }
-
+    
 }

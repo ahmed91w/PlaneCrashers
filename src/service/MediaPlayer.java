@@ -5,8 +5,6 @@
  */
 package service;
 
-import javafx.scene.paint.Stop;
-import javax.print.attribute.standard.Media;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
