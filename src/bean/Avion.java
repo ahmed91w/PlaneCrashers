@@ -20,6 +20,7 @@ import service.MediaPlayer;
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class Avion {
 

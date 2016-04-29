@@ -8,7 +8,7 @@
 
 
         public class ConnectionBD {
-        private String url = "jdbc:mysql://localhost:3306/bd3";
+        private String url = "jdbc:mysql://localhost:3306/bdjetgame";
         private String user = "root";
         private String passwd = "";
         private Connection conn ;

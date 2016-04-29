@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Interface;
+package view;
 
 import service.MediaPlayer;
 
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class Home extends javax.swing.JFrame {
 
@@ -33,15 +34,12 @@ public class Home extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(120, 20));
-        setMaximumSize(new java.awt.Dimension(1020, 580));
         setMinimumSize(new java.awt.Dimension(1020, 580));
-        setPreferredSize(new java.awt.Dimension(1020, 580));
         setResizable(false);
         setSize(new java.awt.Dimension(1020, 580));
         getContentPane().setLayout(null);
@@ -49,12 +47,6 @@ public class Home extends javax.swing.JFrame {
         jPanel1.setLayout(null);
         getContentPane().add(jPanel1);
         jPanel1.setBounds(1721, 0, 0, 675);
-
-        jLabel2.setFont(new java.awt.Font("Astron Boy Rg", 0, 48)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 51, 0));
-        jLabel2.setText("Jet GAME");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(390, 170, 310, 80);
 
         jButton1.setFont(new java.awt.Font("Astron Boy Video", 1, 24)); // NOI18N
         jButton1.setText("Start");
@@ -73,7 +65,7 @@ public class Home extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/startingbg.jpg"))); // NOI18N
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 1074, 670);
+        jLabel1.setBounds(0, 0, 1120, 700);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -129,7 +121,6 @@ public class Home extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

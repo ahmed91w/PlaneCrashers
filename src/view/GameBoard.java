@@ -3,25 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Interface;
+package view;
 
+import bean.Joueur;
 import bean.Partie;
 import bean.Session;
 import java.applet.AppletContext;
 import java.applet.AppletStub;
 import java.io.File;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import jetGame.StartingClass;
+import service.JoueurService;
 import service.MediaPlayer;
+import service.PartieService;
 
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class GameBoard extends javax.swing.JFrame {
 
     static long tStart;
+    PartieService partieService = new PartieService();
+    JoueurService joueurService = new JoueurService();
 
     /**
      * Creates new form Login
@@ -29,6 +40,24 @@ public class GameBoard extends javax.swing.JFrame {
     public GameBoard() {
 
         initComponents();
+        iniCombobox();
+
+    }
+
+    public void iniCombobox() {
+        List<Joueur> joueurs = new ArrayList<>();
+        try {
+            joueurs = joueurService.findAll();
+        } catch (SQLException ex) {
+            Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (joueurs != null) {
+            for (Joueur joueur : joueurs) {
+                jComboBox1.addItem(joueur.getNom());
+            }
+        } else {
+            jComboBox1.addItem("--");
+        }
 
     }
 
@@ -72,13 +101,13 @@ public class GameBoard extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(300, 50));
-        setMaximumSize(new java.awt.Dimension(1300, 600));
         setResizable(false);
 
-        jTextField1.setText("DefaultPlayer");
+        jTextField1.setEnabled(false);
 
         jLabel1.setText("Joueur");
 
@@ -184,6 +213,14 @@ public class GameBoard extends javax.swing.JFrame {
 
         jTextField2.setEditable(false);
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nouveau .." }));
+        jComboBox1.setToolTipText("");
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -241,7 +278,9 @@ public class GameBoard extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jRadioButton4))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
                                 .addGap(30, 30, 30)
                                 .addComponent(jLabel11)
                                 .addGap(18, 18, 18)
@@ -271,11 +310,13 @@ public class GameBoard extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(54, 54, 54)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel11)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRadioButton1)
                     .addComponent(jRadioButton2)
@@ -366,49 +407,59 @@ public class GameBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Partie p = getParams();
-
-        Session.setAttributes(p, "partie");
-        final JFrame frame = new JFrame("Java OpenStreetMap Editor");
-        StartingClass sc = new StartingClass();
-        sc.setStub(new AppletStub() {
-            public void appletResize(int w, int h) {
-                frame.setSize(w, h);
-            }
-
-            public AppletContext getAppletContext() {
-                return null;
-            }
-
-            public URL getCodeBase() {
-                try {
-                    return new File(".").toURI().toURL();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
+        try {
+            Joueur joueur = new Joueur();
+            Partie p = getParams();
+            joueur.setNom(jTextField1.getText());
+            List<Joueur> joueurs = joueurService.findAll();
+            if(joueurs!= null){
+                for (Joueur joueur1 : joueurs) {
+                if (joueur1.getNom().equals(joueur.getNom())) {
+                        partieService.create(p);
+                        break;
+                }else if (!joueur1.getNom().equals(joueur.getNom())){
+                    partieService.create(p);
+                    joueurService.create(joueur);
                 }
             }
-
-            public URL getDocumentBase() {
-                return getCodeBase();
             }
-
-            public String getParameter(String k) {
-                return null;
-            }
-
-            public boolean isActive() {
-                return true;
-            }
-        });
-        setLocation(0, 0);
-        setSize(1360, 700);
-
-        sc.init();
-        sc.start();
-
-        add(sc);
-        remove(jPanel1);
+            Session.setAttributes(p, "partie");
+            final JFrame frame = new JFrame("Java OpenStreetMap Editor");
+            StartingClass sc = new StartingClass();
+            sc.setStub(new AppletStub() {
+                public void appletResize(int w, int h) {
+                    frame.setSize(w, h);
+                }
+                public AppletContext getAppletContext() {
+                    return null;
+                }
+                public URL getCodeBase() {
+                    try {
+                        return new File(".").toURI().toURL();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+                public URL getDocumentBase() {
+                    return getCodeBase();
+                }
+                public String getParameter(String k) {
+                    return null;
+                }
+                public boolean isActive() {
+                    return true;
+                }
+            });
+            setLocation(0, 0);
+            setSize(1360, 700);
+            sc.init();
+            sc.start();
+            add(sc);
+            remove(jPanel1);
+        } catch (SQLException ex) {
+            Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -427,6 +478,17 @@ public class GameBoard extends javax.swing.JFrame {
     private void jRadioButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton5MouseClicked
         MediaPlayer.playSound("/sound/Menu_Select_00.wav");
     }//GEN-LAST:event_jRadioButton5MouseClicked
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+        if (jComboBox1.getSelectedItem().equals("Nouveau ..")) {
+            jTextField1.setText("");
+            jTextField1.setEnabled(true);
+        } else{
+            jTextField1.setEnabled(false);
+            jTextField1.setText(jComboBox1.getSelectedItem().toString());
+        }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     public String getSelectedAvion() {
         String avion = "";
@@ -527,6 +589,7 @@ public class GameBoard extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

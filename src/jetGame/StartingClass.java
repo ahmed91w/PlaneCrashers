@@ -16,14 +16,21 @@ import bean.Session;
 import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Label;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.ImageObserver;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javax.swing.JFrame;
 import service.MediaPlayer;
@@ -31,6 +38,7 @@ import service.MediaPlayer;
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class StartingClass extends Applet implements Runnable, KeyListener, ActionListener {
 
@@ -48,6 +56,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
     public static Thread attackThread;
 
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
+    Font f;
+    Label label2;
+    Label label1;
 
     public StartingClass() {
 
@@ -55,7 +66,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
 
     public void initImages() {
 
-        socreboard = toolkit.getImage("src/res/score.png");
+        socreboard = toolkit.getImage("src/res/ScoreBoard2.png");
         vieOff = toolkit.getImage("src/res/nbr-vie-off.png");
         vieOn = toolkit.getImage("src/res/nbr-vieON.png");
         vieOn1on3 = toolkit.getImage("src/res/nbr-vieOn1_3");
@@ -64,7 +75,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
 //        boss = toolkit.getImage("src/res/Boss B-3.mini.png");
     }
 
-    public void initComponent() {
+    public void initComponent() throws FontFormatException, IOException {
         setSize(toolkit.getScreenSize());
         setBackground(Color.BLACK);
         setFocusable(true);
@@ -74,7 +85,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
         frame.setResizable(false);
         frame.setTitle("JetGame By AHMED WAFDI & ANAS SAOUDI");
         frame.setFocusable(true);
-        Font f = new Font("Arial", Font.BOLD, 18);
+        //Font f = new Font("Brush Script MT Italic", Font.ITALIC, 24);
+        f = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("src/font/digital-7.ttf"));
+        f = f.deriveFont(75.0f);
         setFont(f);
     }
 
@@ -90,12 +103,45 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
     @Override
     public void init() {
 
-        initComponent();
+        try {
+            initComponent();
+        } catch (FontFormatException ex) {
+            Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initImages();
+        partie = (Partie) Session.getAttributes("partie");
+
+        //InfoBoard
+        Label label = new Label();
+        label.setBounds(1170, 168, 80, 31);
+        label1 = new Label();
+        label1.setBounds(1270, 108, 10, 10);
+        label2 = new Label();
+        label2.setBounds(1070, 108, 10, 10);
+        Font f = new Font("Arial", Font.BOLD, 12);
+        Font f1 = new Font("Arial", Font.BOLD, 12);
+        label.setFont(f);
+        label1.setFont(f1);
+        label2.setFont(f1);
+        Color c = new Color(0, 100, 186);
+        Color c1 = new Color(131, 28, 28);
+        label.setBackground(c);
+        label1.setBackground(Color.WHITE);
+        label2.setBackground(Color.WHITE);
+        label1.setForeground(c1);
+        label2.setForeground(c1);
+        label.setText(partie.getJoueur().getNom());
+        label1.setText("##");
+        label2.setText(partie.getNiveau().toString());
+
+        add(label);
+        add(label1);
+        add(label2);
 //        pause = new Button("PAUSE");
 //        pause.addActionListener(this);
 //        pause.setBounds(10, 10, 100, 30);
-        partie = (Partie) Session.getAttributes("partie");
 
 //        add(pause);
     }
@@ -240,20 +286,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
     public void whileAvionIsAlive() {
         niveauHaut();
         avion.update();
-
         if (Avion.projectiles.size() > 0) {
             for (int i = 0; i < Avion.projectiles.size(); i++) {
                 avion.getProjectiles().get(i).update();
             }
         }
-
         bg1.update();
         bg2.update();
-
         updateShootEnnemie();
         repaint();
         attack.removeEnnemisOverLimitte();
-
     }
 
     public void updateBossEnnemi() {
@@ -309,20 +351,23 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
         drawEnnemis(g);
 
         drawAvion(g);
-
-        g.drawString("Player " + partie.getJoueur(), 1200, 40);
-        g.drawString("SCORE " + partie.score, 1200, 80);
-
         drawShootEnnemie(g);
+        drawInfoBoard(g);
     }
 
     public void niveauHaut() {
-        if (partie.score == 1000) {
+        if (partie.score >= 1000) {
             partie.setNiveau(2);
-        } else if (partie.score == 2000) {
+            repaint();
+
+        }
+        if (partie.score >= 2000) {
             partie.setNiveau(3);
-        } else if (partie.score >= 3000) {
+            repaint();
+        }
+        if (partie.score >= 3000) {
             partie.setNiveau(4);
+            repaint();
         }
     }
 
@@ -364,6 +409,27 @@ public class StartingClass extends Applet implements Runnable, KeyListener, Acti
     public void drawBackground(Graphics g) {
         g.drawImage(bg1.getBackground(), bg1.getBgX(), bg1.getBgY(), this);
         g.drawImage(bg2.getBackground(), bg2.getBgX(), bg2.getBgY(), this);
+    }
+
+    public void drawInfoBoard(Graphics g) {
+        //Affichage Score
+        g.drawImage(socreboard, 1000, 10, this);
+        Color c = new Color(131, 28, 28);
+        g.setColor(c);
+        String s = Integer.toString(partie.score);
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '1') {
+                StringBuffer bf = new StringBuffer(s);
+                bf.insert(i, ' ');
+                g.drawString("" + bf.toString(), 1090, 142);
+                break;
+            } else {
+                g.drawString("" + partie.score, 1090, 142);
+                break;
+            }
+        }
+        //Affichage Niveau
+        label2.setText(partie.getNiveau().toString());
     }
 
     public void drawAvion(Graphics g) {

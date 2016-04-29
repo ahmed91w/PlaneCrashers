@@ -8,29 +8,36 @@ package bean;
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class Partie {
 
-    private String joueur;
+    private Joueur joueur = new Joueur();
     private String avion;
     private Integer niveau;
     private BossEnnemi boss;
-    public static int score;
+    public static int score=0;
 
-    public Partie(String joueur, String avion, Integer niveau) {
-        this.joueur = joueur;
-        this.avion = avion;
-        this.niveau = niveau;
-        this.score = 0;
+    public Partie() {
     }
 
-    public String getJoueur() {
+    
+    public Partie(String joueur, String avion, Integer niveau) {
+        this.joueur .setNom(joueur);
+        this.avion = avion;
+        this.niveau = niveau;
+        //this.score = 0;
+    }
+
+    public Joueur getJoueur() {
         return joueur;
     }
 
-    public void setJoueur(String joueur) {
+    public void setJoueur(Joueur joueur) {
         this.joueur = joueur;
     }
+
+    
 
     public String getAvion() {
         return avion;

@@ -14,6 +14,7 @@ import jetGame.StartingClass;
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class Ennemi {
 
@@ -35,7 +36,6 @@ public class Ennemi {
 
     private Rectangle r = new Rectangle();
 
-
     public void update() {
         if (detruit == false) {
             centerY -= vitesseY;
@@ -52,12 +52,9 @@ public class Ennemi {
             if (StartingClass.partie.getNiveau() == 3 || StartingClass.partie.getNiveau() == 4) {
                 follow();
             }
-
             r.setBounds(centerX, centerY, 69, 60);
-
 //           collisionWithAvion(StartingClass.avion);
         }
-       
     }
 
     public void follow() {
@@ -70,7 +67,6 @@ public class Ennemi {
                 vitesseX = 0;
             }
         }
-
     }
 
     public Image getImage() {
@@ -129,15 +125,12 @@ public class Ennemi {
         Projectile p = new Projectile(this.getCenterX() + 25, this.getCenterY() + 25, true);
 //        p.setVisible(true);
         projectiles.add(p);
-       
+
     }
 
     public boolean checkCollision(Rectangle rect) {
         if (rect.intersects(r)) {
-            
-
             return true;
-
         }
         return false;
     }

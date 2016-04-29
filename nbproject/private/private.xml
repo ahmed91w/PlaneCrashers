@@ -3,9 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Ahmed/Documents/NetBeansProjects/JetGame/src/bean/BossEnnemi.java</file>
-            <file>file:/C:/Users/Ahmed/Documents/NetBeansProjects/JetGame/src/bean/Ennemi.java</file>
-            <file>file:/C:/Users/Ahmed/Documents/NetBeansProjects/JetGame/src/bean/Avion.java</file>
+            <file>file:/C:/Users/Saoudi/Documents/NetBeansProjects/JeuAvion/src/bean/Avion.java</file>
+            <file>file:/C:/Users/Saoudi/Documents/NetBeansProjects/JeuAvion/src/jetGame/StartingClass.java</file>
+            <file>file:/C:/Users/Saoudi/Documents/NetBeansProjects/JeuAvion/src/bean/AvionEnnemi.java</file>
+            <file>file:/C:/Users/Saoudi/Documents/NetBeansProjects/JeuAvion/src/bean/Shoot.java</file>
+            <file>file:/C:/Users/Saoudi/Documents/NetBeansProjects/JeuAvion/src/bean/Projectile.java</file>
+            <file>file:/C:/Users/Saoudi/Documents/NetBeansProjects/JeuAvion/src/bean/Attack.java</file>
+            <file>file:/C:/Users/Saoudi/Documents/NetBeansProjects/JeuAvion/src/bean/Ennemi.java</file>
         </group>
     </open-files>
 </project-private>

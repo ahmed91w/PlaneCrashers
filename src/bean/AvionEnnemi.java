@@ -5,7 +5,7 @@
  */
 package bean;
 
-import Interface.Home;
+import view.Home;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -22,6 +22,7 @@ import service.MediaPlayer;
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class AvionEnnemi extends Ennemi implements Runnable {
 
@@ -86,11 +87,9 @@ public class AvionEnnemi extends Ennemi implements Runnable {
 
     public void destroy() {
         synchronized (moveAvionEnnemi) {
-
             this.setDetruit(true);
             MediaPlayer.playSound("/sound/Explosion.wav");
             Image im = toolkit.getImage("src/res/explode.gif");
-
             this.setImage(im);
             try {
                 moveAvionEnnemi.wait(150);
@@ -99,7 +98,6 @@ public class AvionEnnemi extends Ennemi implements Runnable {
             }
             Attack.avionEnnemis.remove(this);
             moveAvionEnnemi.stop();
-
             System.out.println("enemie Stooped");
         }
     }
