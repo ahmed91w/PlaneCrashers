@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class Shoot implements Runnable {
 

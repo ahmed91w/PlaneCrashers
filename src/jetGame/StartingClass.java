@@ -17,23 +17,27 @@ import service.Session;
 import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Label;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import service.MediaPlayer;
 
 
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class StartingClass extends Applet implements Runnable, KeyListener {
 
@@ -42,7 +46,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public static Partie partie;
     public static Attack attack;
     public static GeneratePowerUp powerUpGenerator;
-    private Image image, vieOff, vieOn;
+    private Image image, vieOff, vieOn ,socreboard;
     private static ArrierePlan bg1, bg2;
     private Graphics second;
     public static ThreadGroup g = new ThreadGroup("SFX Sound");
@@ -53,17 +57,22 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public static Thread attackThread;
 
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
+    Font f;
+    Label label2;
+    Label label1;
 
     public StartingClass() {
 
     }
 
     public void initImages() {
+
+        socreboard = toolkit.getImage("src/res/ScoreBoard2.png");
         vieOff = toolkit.getImage("src/res/nbr-vie-off.png");
         vieOn = toolkit.getImage("src/res/nbr-vieON.png");
     }
 
-    public void initComponent() {
+    public void initComponent() throws FontFormatException, IOException {
         setSize(toolkit.getScreenSize());
         setBackground(Color.BLACK);
         setFocusable(true);
@@ -73,7 +82,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         frame.setResizable(false);
         frame.setTitle("JetGame By AHMED WAFDI & ANAS SAOUDI");
         frame.setFocusable(true);
-        Font f = new Font("Arial", Font.BOLD, 18);
+        //Font f = new Font("Brush Script MT Italic", Font.ITALIC, 24);
+        f = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("src/font/digital-7.ttf"));
+        f = f.deriveFont(75.0f);
         setFont(f);
     }
 
@@ -99,11 +110,46 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     @Override
     public void init() {
 
-        initComponent();
+        try {
+            initComponent();
+        } catch (FontFormatException ex) {
+            Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initImages();
+        partie = (Partie) Session.getAttributes("partie");
+
+        //InfoBoard
+        Label label = new Label();
+        label.setBounds(1170, 168, 80, 31);
+        label1 = new Label();
+        label1.setBounds(1270, 108, 10, 10);
+        label2 = new Label();
+        label2.setBounds(1070, 108, 10, 10);
+        Font f = new Font("Arial", Font.BOLD, 12);
+        Font f1 = new Font("Arial", Font.BOLD, 12);
+        label.setFont(f);
+        label1.setFont(f1);
+        label2.setFont(f1);
+        Color c = new Color(0, 100, 186);
+        Color c1 = new Color(131, 28, 28);
+        label.setBackground(c);
+        label1.setBackground(Color.WHITE);
+        label2.setBackground(Color.WHITE);
+        label1.setForeground(c1);
+        label2.setForeground(c1);
+        label.setText(partie.getJoueur().getNom());
+        label1.setText("##");
+        label2.setText(partie.getNiveau().toString());
+
+        add(label);
+        add(label1);
+        add(label2);
 //        pause = new Button("PAUSE");
 //        pause.addActionListener(this);
 //        pause.setBounds(10, 10, 100, 30);
+
 //        add(pause);
         partie = (Partie) Session.getAttributes("partie");
         bossEnnemi = new BossEnnemi();
@@ -347,10 +393,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             //MediaPlayer.playSound("/res/sound/level_up.wav");
         } else if (partie.score >= 2000 && partie.getNiveau() == 2) {
             partie.setNiveau(3);
-            //MediaPlayer.playSound("/res/sound/level_up.wav");
-        } else if (partie.score >= 3000 && partie.getNiveau() == 3) {
             partie.setNiveau(4);
-            //MediaPlayer.playSound("/res/sound/level_up.wav");
         }
 
     }

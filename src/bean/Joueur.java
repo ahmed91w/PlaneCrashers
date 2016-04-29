@@ -8,6 +8,7 @@ package bean;
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class Joueur {
 
@@ -15,6 +16,10 @@ public class Joueur {
     private double totalScore = 0;
     public static int tentative = 3;
 
+    public Joueur() {
+    }
+
+   
     public Joueur(String nom) {
         this.nom = nom;
         this.totalScore = 0;
