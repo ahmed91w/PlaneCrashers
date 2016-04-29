@@ -19,15 +19,11 @@ public class Ennemi {
 
     private int vitesseY, vitesseX, centerX, centerY;
 
-    private boolean onFire = false;
-
     private ArrierePlan bg = StartingClass.getBg1();
 
     private List<Projectile> projectiles = new ArrayList<>();
 
     private boolean detruit = false;
-
-    private boolean canShoot;
 
     private Image image;
 
@@ -149,13 +145,7 @@ public class Ennemi {
         }
     }
 
-    public boolean isOnFire() {
-        return onFire;
-    }
 
-    public void setOnFire(boolean onFire) {
-        this.onFire = onFire;
-    }
 
     public int getVitesseX() {
         return vitesseX;
@@ -171,14 +161,6 @@ public class Ennemi {
 
     public void setProjectiles(List<Projectile> projectiles) {
         this.projectiles = projectiles;
-    }
-
-    public boolean isCanShoot() {
-        return canShoot;
-    }
-
-    public void setCanShoot(boolean canShoot) {
-        this.canShoot = canShoot;
     }
 
     public Rectangle getR() {
