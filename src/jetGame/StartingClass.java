@@ -33,7 +33,6 @@ import javafx.application.Platform;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
@@ -46,17 +45,18 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public static Partie partie;
     public static Attack attack;
     public static GeneratePowerUp powerUpGenerator;
-    private Image image, vieOff, vieOn ,socreboard;
+    private Image image, vieOff, vieOn, socreboard;
     private static ArrierePlan bg1, bg2;
     private Graphics second;
     public static ThreadGroup g = new ThreadGroup("SFX Sound");
     private JFrame frame;
 
     private Thread thread;
-    
+
     public static Thread attackThread;
 
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
+    
     Font f;
     Label label2;
     Label label1;
@@ -117,6 +117,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         } catch (IOException ex) {
             Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         initImages();
         partie = (Partie) Session.getAttributes("partie");
 
@@ -146,11 +147,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         add(label);
         add(label1);
         add(label2);
-//        pause = new Button("PAUSE");
-//        pause.addActionListener(this);
-//        pause.setBounds(10, 10, 100, 30);
 
-//        add(pause);
         partie = (Partie) Session.getAttributes("partie");
         bossEnnemi = new BossEnnemi();
     }
@@ -166,10 +163,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         bg2 = new ArrierePlan(0, -4200);
         avion = new Avion(partie.getAvion());
         System.out.println("partie----->" + partie);
-        thread = new Thread(this,"Principal Thread");
+        thread = new Thread(this, "Principal Thread");
         thread.start();
         //Lancement de l'Attack des AvionEnnemis
-        attackThread = new Thread(attack,"Attack Thread");
+        attackThread = new Thread(attack, "Attack Thread");
         attackThread.start();
 
         powerUpGenerator = new GeneratePowerUp();
@@ -281,7 +278,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     }
 
-    public synchronized void  gameOver() {
+    public synchronized void gameOver() {
         try {
             thread.wait(500);
         } catch (InterruptedException ex) {
@@ -366,6 +363,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
     public void paint(Graphics g) {
+        
         drawBackground(g);
 
         drawNbrVie(g, vieOn, avion.vie);
@@ -376,23 +374,24 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
         drawAvion(g);
 
-        g.drawString("Player " + partie.getJoueur(), 1200, 40);
-        g.drawString("SCORE " + partie.score, 1200, 80);
         if (bossEnnemi.getMove().isAlive() == true) {
             drawBossEnnemie(g);
         }
+
         drawShootEnnemie(g);
         drawShield(g);
         powerUpGenerator.drawPowerUp(g, this);
+//        drawInfoBoard(g);
 //        g.drawImage(toolkit.getImage("src/res/levelCompleted.png"), 200, 200, this);
     }
 
     public void levelUp() {
         if (partie.score >= 1000 && partie.getNiveau() == 1) {
             partie.setNiveau(2);
-            //MediaPlayer.playSound("/res/sound/level_up.wav");
         } else if (partie.score >= 2000 && partie.getNiveau() == 2) {
             partie.setNiveau(3);
+
+        } else if (partie.score >= 3000 && partie.getNiveau() == 3) {
             partie.setNiveau(4);
         }
 
@@ -459,6 +458,27 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         }
     }
 
+    public void drawInfoBoard(Graphics g) {
+        //Affichage Score
+        g.drawImage(socreboard, 1000, 10, this);
+        Color c = new Color(131, 28, 28);
+        g.setColor(c);
+        String s = Integer.toString(partie.score);
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '1') {
+                StringBuffer bf = new StringBuffer(s);
+                bf.insert(i, ' ');
+                g.drawString("" + bf.toString(), 1090, 142);
+                break;
+            } else {
+                g.drawString("" + partie.score, 1090, 142);
+                break;
+            }
+        }
+        //Affichage Niveau
+        label2.setText(partie.getNiveau().toString());
+    }
+
     public static ArrierePlan getBg1() {
         return bg1;
     }
@@ -475,9 +495,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         StartingClass.bg2 = bg2;
     }
 
-    
-    public boolean isLevelUp(){
-        
+    public boolean isLevelUp() {
+
         return true;
     }
 }

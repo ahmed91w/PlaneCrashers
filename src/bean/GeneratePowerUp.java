@@ -16,7 +16,7 @@ import jetGame.StartingClass;
 import service.MediaPlayer;
 
 
-/**
+/** 
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  * @author Anas SAOUDI <anassaoudii@gmail.com>
@@ -25,6 +25,7 @@ public class GeneratePowerUp implements Runnable {
 
     public static List<PowerUp> powerUps = new ArrayList<>();
 
+    
     private Thread generate;
 
     public GeneratePowerUp() {
@@ -49,7 +50,7 @@ public class GeneratePowerUp implements Runnable {
             p.getMove().start();
             powerUps.add(p);
             System.out.println("Power Up added");
-            MediaPlayer.playSound("/res/sound/power_up.wav");
+//            MediaPlayer.playSound("/res/sound/power_up.wav");
             try {
 //                sleep(120000);
                 sleep(60000);

@@ -105,7 +105,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseEntered
-        MediaPlayer.playSound("/res/sound/button_click.wav" );
+//        MediaPlayer.playSound("/res/sound/button_click.wav" );
         jButton1.setIcon(new ImageIcon(toolkit.getImage("src/res/startButtonClicked.png")));
     }//GEN-LAST:event_jButton1MouseEntered
 
