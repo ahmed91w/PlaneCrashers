@@ -412,16 +412,20 @@ public class GameBoard extends javax.swing.JFrame {
             Partie p = getParams();
             joueur.setNom(jTextField1.getText());
             List<Joueur> joueurs = joueurService.findAll();
-            if(joueurs!= null){
+            if (joueurs != null) {
+                int flag = 0;
                 for (Joueur joueur1 : joueurs) {
-                if (joueur1.getNom().equals(joueur.getNom())) {
-                        partieService.create(p);
-                        break;
-                }else if (!joueur1.getNom().equals(joueur.getNom())){
+                    if (joueur1.getNom().equals(joueur.getNom())) {
+                        int res = partieService.create(p);
+                        if (res > 0) {
+                            flag++;
+                        }
+                    }
+                }
+                if (flag != 1) {
                     partieService.create(p);
                     joueurService.create(joueur);
                 }
-            }
             }
             Session.setAttributes(p, "partie");
             final JFrame frame = new JFrame("Java OpenStreetMap Editor");
@@ -430,9 +434,11 @@ public class GameBoard extends javax.swing.JFrame {
                 public void appletResize(int w, int h) {
                     frame.setSize(w, h);
                 }
+
                 public AppletContext getAppletContext() {
                     return null;
                 }
+
                 public URL getCodeBase() {
                     try {
                         return new File(".").toURI().toURL();
@@ -441,12 +447,15 @@ public class GameBoard extends javax.swing.JFrame {
                         return null;
                     }
                 }
+
                 public URL getDocumentBase() {
                     return getCodeBase();
                 }
+
                 public String getParameter(String k) {
                     return null;
                 }
+
                 public boolean isActive() {
                     return true;
                 }
@@ -484,7 +493,7 @@ public class GameBoard extends javax.swing.JFrame {
         if (jComboBox1.getSelectedItem().equals("Nouveau ..")) {
             jTextField1.setText("");
             jTextField1.setEnabled(true);
-        } else{
+        } else {
             jTextField1.setEnabled(false);
             jTextField1.setText(jComboBox1.getSelectedItem().toString());
         }

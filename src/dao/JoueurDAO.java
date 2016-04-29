@@ -14,7 +14,8 @@ import java.util.List;
 
 /**
  *
- * @author SAOUDI Anas<anassaoudii@gmail.com>
+ * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class JoueurDAO {
     

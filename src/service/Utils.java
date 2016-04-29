@@ -5,9 +5,12 @@
  */
 package service;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
+ * @author Anas SAOUDI <anassaoudii@gmail.com>
  */
 public class Utils {
 
@@ -19,5 +22,9 @@ public class Utils {
         String hours = String.format(format, elapsedTime / 3600);
         String time = hours + ":" + minutes + ":" + seconds;
         return time;
+    }
+
+    public static void infoBox(String infoMessage, String titleBar) {
+        JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
     }
 }

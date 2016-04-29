@@ -27,7 +27,7 @@ public class Projectile {
         this.y = y;
 
         if (isEnnemie) {
-            vitesseY = (StartingClass.partie.getNiveau() + 9);
+            vitesseY = (StartingClass.partie.getNiveau() + 7);
             bullet = toolkit.getImage("src/res/tiremal.png");
         } else {
             vitesseY = 9;
@@ -41,7 +41,6 @@ public class Projectile {
 //            vitesseY = 9;
             y -= vitesseY;
             r.setBounds(this.x, this.y, 10, 20);
-           
 
         } else {
             StartingClass.avion.projectiles.remove(this);
@@ -59,10 +58,39 @@ public class Projectile {
 
     public void updateProjectileEnnemi() {
         if (y < 700) {
-//            vitesseY = 4;
+            if (checkCollision(StartingClass.avion.getR())) {
+                if (StartingClass.avion.getBouclier() == 0) {
+                    this.setY(700);
+                    StartingClass.avion.destroy();
+                } else {
+                    this.setY(700);
+                    StartingClass.avion.setBouclier(StartingClass.avion.getBouclier() - 1);
+                }
+
+            }
             y += vitesseY;
             r.setBounds(this.x, this.y, 10, 20);
-        } 
+        }
+    }
+
+    public void updateProjectileBoss() {
+        if (y < 700) {
+            if (checkCollision(StartingClass.avion.getR())) {
+                if (StartingClass.avion.getBouclier() == 0) {
+                    this.setY(700);
+                    StartingClass.avion.destroy();
+                } else {
+                    this.setY(700);
+                    StartingClass.avion.setBouclier(StartingClass.avion.getBouclier() - 1);
+
+                }
+
+            }
+            y += vitesseY;
+            r.setBounds(this.x, this.y, 10, 20);
+        } else {
+            BossEnnemi.projectiles.remove(this);
+        }
     }
 
     public int getX() {

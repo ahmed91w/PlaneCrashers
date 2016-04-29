@@ -11,10 +11,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.image.ImageObserver;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jetGame.StartingClass;
-import static jetGame.StartingClass.avion;
 import service.MediaPlayer;
 
 /**
@@ -25,7 +22,7 @@ import service.MediaPlayer;
 public class Avion {
 
     private int centerX = 600; //coordonnées
-    private int centerY = 540; //coordonnées
+    private int centerY = 485; //coordonnées
 
     public static int vie;
     public static int toucher = 0;
@@ -43,13 +40,16 @@ public class Avion {
     private boolean movingUp = false;
     private boolean movingDown = false;
 
+    private int bouclier = 0;
+    private PowerUp powerUpON;
+
     private Image image;
+    private Image bouclierImg;
     private Image drawingimage;
     private Image imageMoveUp;
     private Image imageMoveDown;
     private Image imageMoveLeft;
     private Image imageMoveRight;
-    private Image vieOff, vieOn;
 
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
 
@@ -62,6 +62,7 @@ public class Avion {
         r = new Rectangle(0, 0, 0, 0);
         image = toolkit.getImage("src/res/" + name + ".png");
         drawingimage = toolkit.getImage("src/res/" + name + ".png");
+        bouclierImg = toolkit.getImage("src/res/shieldAvion.png");
         if (name.equals("MiG-51S")) {
             vie = 3;
             type = 1;
@@ -73,7 +74,7 @@ public class Avion {
             imageMoveLeft = toolkit.getImage("src/res/moveLeft.png");
             imageMoveRight = toolkit.getImage("src/res/moveRight.png");
         } else if (name.equals("F_A-28A-mini")) {
-            vie = 5;
+            vie = 4;
             type = 2;
             height = 60;
             width = 89;
@@ -83,7 +84,7 @@ public class Avion {
             imageMoveLeft = image;
             imageMoveRight = image;
         } else if (name.equals("Su-51K-mini")) {
-            vie = 9;
+            vie = 6;
             type = 4;
             height = 80;
             width = 96;
@@ -93,7 +94,7 @@ public class Avion {
             imageMoveLeft = image;
             imageMoveRight = image;
         } else {
-            vie = 7;
+            vie = 5;
             type = 3;
             height = 48;
             width = 87;
@@ -124,16 +125,12 @@ public class Avion {
             }
 
         } else if (vitesseY > 0) { //si vitesseY est posetive ==> deplacement en bas
-            if (centerY < 500) {//pour ne pas depasser les bornes
+            if (centerY < 485) {//pour ne pas depasser les bornes
                 centerY += vitesseY;
             }
 
         }
         r.setRect(centerX, centerY, height, width);
-
-        if (StartingClass.partie.getNiveau() == 4) {
-            checkCollisionShootEnemie();
-        }
 
     }
 
@@ -145,15 +142,45 @@ public class Avion {
         this.image = image;
     }
 
+    public Image getBouclierImg() {
+        return bouclierImg;
+    }
+
+    public void setBouclierImg(Image bouclierImg) {
+        this.bouclierImg = bouclierImg;
+    }
+
+    
     public void shoot() {
         if (type == 4) {
             Projectile p1 = new Projectile(centerX + 65, centerY + 30, false);
             Projectile p2 = new Projectile(centerX + 10, centerY + 30, false);
             projectiles.add(p1);
             projectiles.add(p2);
-        } else {
-            Projectile p = new Projectile(centerX + 24, centerY - 10, false);
-            projectiles.add(p);
+        } else if (type == 1 || type == 2 || type == 3) {
+            if (powerUpON != null) {
+                if (powerUpON.getType() == 2) {
+                    Projectile p1 = new Projectile(centerX + 15, centerY + 20, false);
+                    Projectile p2 = new Projectile(centerX + 35, centerY + 20, false);
+                    projectiles.add(p1);
+                    projectiles.add(p2);
+                } else if (powerUpON.getType() == 3) {
+                    Projectile p1 = new Projectile(centerX, centerY - (width / 2), false);
+                    Projectile p2 = new Projectile(centerX + (height / 2), centerY - 10, false);
+                    Projectile p3 = new Projectile(centerX + height, centerY - (width / 2), false);
+                    projectiles.add(p1);
+                    projectiles.add(p2);
+                    projectiles.add(p3);
+                } else {
+                    Projectile p = new Projectile(centerX + 24, centerY - 10, false);
+                    projectiles.add(p);
+                }
+
+            } else {
+                Projectile p = new Projectile(centerX + 24, centerY - 10, false);
+                projectiles.add(p);
+            }
+
         }
 
     }
@@ -338,19 +365,18 @@ public class Avion {
         Avion.globalSpeed = globalSpeed;
     }
 
-    public void checkCollisionShootEnemie() {
-        for (int i = 0; i < Attack.avionEnnemis.size(); i++) {
-            for (int j = 0; j < Attack.avionEnnemis.get(i).getProjectiles().size(); j++) {
-                if (this.getR().intersects(Attack.avionEnnemis.get(i).getProjectiles().get(j).getR()) == true) {
-                    Attack.avionEnnemis.get(i).getProjectiles().remove(j);
-                    StartingClass.avion.destroy();
-
-                }
-
-            }
-        }
-    }
-
+//    public void checkCollisionShootEnemie() {
+//        for (int i = 0; i < Attack.avionEnnemis.size(); i++) {
+//            for (int j = 0; j < Attack.avionEnnemis.get(i).getProjectiles().size(); j++) {
+//                if (this.getR().intersects(Attack.avionEnnemis.get(i).getProjectiles().get(j).getR()) == true) {
+//                    Attack.avionEnnemis.get(i).getProjectiles().remove(j);
+//                    StartingClass.avion.destroy();
+//
+//                }
+//
+//            }
+//        }
+//    }
     public void toucher() {
         toucher++;
         if (toucher == 3) {
@@ -359,78 +385,20 @@ public class Avion {
         }
     }
 
-    public void drawVie(Graphics g, ImageObserver img) {
-        switch (vie) {
-            case 1:
-                g.drawImage(vieOn, 50, 570, img);
-//                g.drawImage(vieOff, 90, 570, img);
-//                g.drawImage(vieOff, 130, 570, img);
-                break;
-            case 2:
-                g.drawImage(vieOn, 50, 570, img);
-                g.drawImage(vieOn, 90, 570, img);
-//                g.drawImage(vieOff, 130, 570, img);
-                break;
-            case 3:
-                g.drawImage(vieOn, 50, 570, img);
-                g.drawImage(vieOn, 90, 570, img);
-                g.drawImage(vieOn, 130, 570, img);
-                break;
-            case 4:
-                g.drawImage(vieOn, 50, 570, img);
-                g.drawImage(vieOn, 90, 570, img);
-                g.drawImage(vieOn, 130, 570, img);
-                g.drawImage(vieOn, 170, 570, img);
-                break;
-            case 5:
-                g.drawImage(vieOn, 50, 570, img);
-                g.drawImage(vieOn, 90, 570, img);
-                g.drawImage(vieOn, 130, 570, img);
-                g.drawImage(vieOn, 170, 570, img);
-                g.drawImage(vieOn, 210, 570, img);
+    public int getBouclier() {
+        return bouclier;
+    }
 
-                break;
-            case 6:
-                g.drawImage(vieOn, 50, 570, img);
-                g.drawImage(vieOn, 90, 570, img);
-                g.drawImage(vieOn, 130, 570, img);
-                g.drawImage(vieOn, 170, 570, img);
-                g.drawImage(vieOn, 210, 570, img);
-                g.drawImage(vieOn, 250, 570, img);
+    public void setBouclier(int bouclier) {
+        this.bouclier = bouclier;
+    }
 
-                break;
-            case 7:
-                g.drawImage(vieOn, 50, 570, img);
-                g.drawImage(vieOn, 90, 570, img);
-                g.drawImage(vieOn, 130, 570, img);
-                g.drawImage(vieOn, 170, 570, img);
-                g.drawImage(vieOn, 210, 570, img);
-                g.drawImage(vieOn, 250, 570, img);
-                g.drawImage(vieOn, 290, 570, img);
+    public PowerUp getPowerUpON() {
+        return powerUpON;
+    }
 
-                break;
-            case 8:
-                g.drawImage(vieOn, 50, 570, img);
-                g.drawImage(vieOn, 90, 570, img);
-                g.drawImage(vieOn, 130, 570, img);
-                g.drawImage(vieOn, 170, 570, img);
-                g.drawImage(vieOn, 210, 570, img);
-                g.drawImage(vieOn, 250, 570, img);
-                g.drawImage(vieOn, 290, 570, img);
-
-                break;
-            case 9:
-                g.drawImage(vieOn, 50, 570, img);
-                g.drawImage(vieOn, 90, 570, img);
-                g.drawImage(vieOn, 130, 570, img);
-                g.drawImage(vieOn, 170, 570, img);
-                g.drawImage(vieOn, 210, 570, img);
-                g.drawImage(vieOn, 250, 570, img);
-                g.drawImage(vieOn, 290, 570, img);
-                g.drawImage(vieOn, 330, 570, img);
-                break;
-
-        }
+    public void setPowerUpON(PowerUp powerUpON) {
+        this.powerUpON = powerUpON;
     }
 
     public int getType() {
@@ -439,22 +407,6 @@ public class Avion {
 
     public void setType(int type) {
         this.type = type;
-    }
-
-    public Image getVieOff() {
-        return vieOff;
-    }
-
-    public void setVieOff(Image vieOff) {
-        this.vieOff = vieOff;
-    }
-
-    public Image getVieOn() {
-        return vieOn;
-    }
-
-    public void setVieOn(Image vieOn) {
-        this.vieOn = vieOn;
     }
 
 }

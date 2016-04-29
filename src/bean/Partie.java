@@ -16,7 +16,7 @@ public class Partie {
     private String avion;
     private Integer niveau;
     private BossEnnemi boss;
-    public static int score=0;
+    public static int score=990;
 
     public Partie() {
     }
