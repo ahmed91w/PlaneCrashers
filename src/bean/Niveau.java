@@ -27,8 +27,34 @@ public class Niveau {
         this.Background = toolkit.getImage("src/res/" + Background);
     }
 
-    public Niveau(int vitt_ennemie) {
-        this.vitt_ennemie = vitt_ennemie;
+    public Niveau(int choix) {
+        switch (choix) {
+            case 4:
+                vitt_ennemie=12;
+                nbr_ennemmie=500;
+                bosse=true;
+                this.Background = toolkit.getImage("src/res/warshipsBackground-Récupéré");
+                break;
+            case 3:
+                vitt_ennemie=10;
+                nbr_ennemmie=400;
+                bosse=false;
+                this.Background = toolkit.getImage("src/res/warshipsBackground-Récupéré");
+                break;
+            case 2:
+                vitt_ennemie=6;
+                nbr_ennemmie=300;
+                bosse=false;
+                this.Background = toolkit.getImage("src/res/warshipsBackground-Récupéré");
+                break;
+            default:
+                vitt_ennemie=4;
+                nbr_ennemmie=150;
+                bosse=false;
+                this.Background = toolkit.getImage("src/res/warshipsBackground-Récupéré");
+                break;
+        }
+
     }
 
     public Niveau() {

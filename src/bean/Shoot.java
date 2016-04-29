@@ -19,7 +19,7 @@ public class Shoot implements Runnable {
 
     public Shoot(AvionEnnemi ae) {
         this.ae = ae;
-        this.shoot = new Thread(this);
+        this.shoot = new Thread(this,"Shoot Thread");
     }
 
     @Override
@@ -27,7 +27,7 @@ public class Shoot implements Runnable {
         while (ae.getProjectiles().size() != 4) {
             ae.shoot();
             try {
-                Thread.sleep(1500);
+                Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Shoot.class.getName()).log(Level.SEVERE, null, ex);
             }

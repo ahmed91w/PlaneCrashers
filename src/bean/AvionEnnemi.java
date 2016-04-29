@@ -5,7 +5,7 @@
  */
 package bean;
 
-import Interface.Home;
+import view.Home;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -17,45 +17,49 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jetGame.StartingClass;
-import service.MediaPlayer;
 
 /**
  *
  * @author Ahmed WAFDI <ahmed.wafdi22@gmail.com>
  */
 public class AvionEnnemi extends Ennemi implements Runnable {
-    
+
     private List<Projectile> projectiles;
     private Thread moveAvionEnnemi;
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
     private Shoot shoot;
     Random random = new Random();
-    private int lv;
-    
-    public AvionEnnemi(int x, int y) {
+    private int lv;//1 vert | 2 noir | 3 jaune
+
+    public AvionEnnemi() {
+        Random ranX = new Random();
         lv = random.nextInt((3 - 1) + 1) + 1;
-        setCenterX(x);
-        setCenterY(y);
-        moveAvionEnnemi = new Thread(this);
+        setCenterX(ranX.nextInt(1200));
+        setCenterY(-80);
+        moveAvionEnnemi = new Thread(this, "AvionEnnemie");
         if (StartingClass.partie.getNiveau() == 1) {
-            setVitesseY(-StartingClass.partie.getNiveau());
+            setVitesseY(-StartingClass.partie.getNiveau() - 2);
         } else if (lv == 2) {
-            setVitesseY(-StartingClass.partie.getNiveau() * 2);
+            setVitesseY(-StartingClass.partie.getNiveau() - 3);
         } else {
-            setVitesseY(-StartingClass.partie.getNiveau() * 3);
+            setVitesseY(-StartingClass.partie.getNiveau() - 4);
         }
         setImage(toolkit.getImage("src/res/ennemiLvl" + lv + ".png"));
 //        setImage(toolkit.getImage("src/res/ennemiLvl3.png"));
 
         projectiles = new ArrayList<>();
-        if (StartingClass.partie.getNiveau() == 3 || StartingClass.partie.getNiveau() == 4) {
+        if ( StartingClass.partie.getNiveau() == 2 || StartingClass.partie.getNiveau() == 3 || StartingClass.partie.getNiveau() == 4) {
             shoot = new Shoot(this);
         }
         
+        
+
     }
-    
+
     public void update() {
+
         if (isDetruit() == false) {
+
 //            getCenterY() -= getVitesseY();
             setCenterY(getCenterY() - getVitesseY());
 //            setVitesseY(-lvl);
@@ -81,16 +85,16 @@ public class AvionEnnemi extends Ennemi implements Runnable {
 
 //           collisionWithAvion(StartingClass.avion);
         }
-        
+
     }
-    
+
     public void destroy() {
         synchronized (moveAvionEnnemi) {
-            
+
             this.setDetruit(true);
-            MediaPlayer.playSound("/sound/Explosion.wav");
+            //MediaPlayer.playSound("/res/sound/Explosion.wav");
             Image im = toolkit.getImage("src/res/explode.gif");
-            
+
             this.setImage(im);
             try {
                 moveAvionEnnemi.wait(150);
@@ -98,69 +102,72 @@ public class AvionEnnemi extends Ennemi implements Runnable {
                 Logger.getLogger(AvionEnnemi.class.getName()).log(Level.SEVERE, null, ex);
             }
             Attack.avionEnnemis.remove(this);
+            if (StartingClass.partie.getNiveau() == 3 || StartingClass.partie.getNiveau() == 4) {
+                System.out.println("lvl "+StartingClass.partie.getNiveau()+" isAlive "+shoot.shoot.isAlive());
+                    shoot.shoot.stop();
+                
+            }
             moveAvionEnnemi.stop();
 
-//            System.out.println("enemie Stooped");
+            System.out.println("enemie killed");
         }
     }
-    
+
     public void startAvion() {
         this.update();
         moveAvionEnnemi.start();
     }
-    
+
     public void updateAll() {
         for (int i = 0; i < projectiles.size(); i++) {
             projectiles.get(i).updateProjectileEnnemi();
         }
     }
-    
+
     public void drawAll(Graphics g, ImageObserver imageObserver) {
         for (int i = 0; i < projectiles.size(); i++) {
             g.drawImage(projectiles.get(i).getBullet(), projectiles.get(i).getX(), projectiles.get(i).getY(), imageObserver);
         }
     }
-    
-    public static AvionEnnemi newEnnemi() {
-        
-        Random random = new Random();
-        random.nextInt(1200);
-        AvionEnnemi ae = new AvionEnnemi(random.nextInt(1200), -60);
-        return ae;
-    }
-    
+
     public void shoot() {
-        
+
         Projectile p = new Projectile(getCenterX() + 30, getCenterY() + 60, true);
         projectiles.add(p);
-        
+
     }
-    
+
     public List<Projectile> getProjectiles() {
         return projectiles;
     }
-    
+
     public void setProjectiles(List<Projectile> projectiles) {
         this.projectiles = projectiles;
     }
-    
+
     public Shoot getShoot() {
         return shoot;
     }
-    
+
     public void setShoot(Shoot shoot) {
         this.shoot = shoot;
     }
-    
+
     @Override
     public void run() {
         while (this.getMoveAvionEnnemi().isAlive()) {
             if (this.getCenterY() < 700) {
                 update();
-//                System.out.println("Still Runnung AVionEnnemi!!!!");
                 for (int i = 0; i < StartingClass.avion.getProjectiles().size(); i++) {
                     if (StartingClass.avion.getProjectiles().get(i).checkCollision(this.getR()) == true) {
-                        StartingClass.partie.score += 10;
+                        if (lv == 1) {//verte
+                            StartingClass.partie.score += 100;
+                        } else if (lv == 2) {//noir
+                            StartingClass.partie.score += 50;
+                        } else {//jaune
+                            StartingClass.partie.score += 150;
+                        }
+
                         StartingClass.avion.getProjectiles().remove(i);
                         destroy();
                     }
@@ -173,7 +180,7 @@ public class AvionEnnemi extends Ennemi implements Runnable {
                         StartingClass.avion.setBouclier(StartingClass.avion.getBouclier() - 1);
                         destroy();
                     }
-                    
+
                 }
                 try {
                     Thread.sleep(50);
@@ -181,19 +188,24 @@ public class AvionEnnemi extends Ennemi implements Runnable {
                     ex.printStackTrace();
                 }
             } else {
+                Attack.avionEnnemis.remove(this);
                 this.setDetruit(true);
                 moveAvionEnnemi.stop();
-                
+                if (StartingClass.partie.getNiveau() == 3 || StartingClass.partie.getNiveau() == 4) {
+                    
+                        shoot.shoot.stop();
+                    
+                }
             }
         }
     }
-    
+
     public Thread getMoveAvionEnnemi() {
         return moveAvionEnnemi;
     }
-    
+
     public void setMoveAvionEnnemi(Thread moveAvionEnnemi) {
         this.moveAvionEnnemi = moveAvionEnnemi;
     }
-    
+
 }

@@ -36,11 +36,12 @@ public class Projectile {
     }
 
     public void update() {
+        
         if (y > 0) {
 //            vitesseY = 9;
             y -= vitesseY;
             r.setBounds(this.x, this.y, 10, 20);
-
+//            System.out.println("Proje Avion "+y);
         } else {
             StartingClass.avion.projectiles.remove(this);
         }
@@ -69,6 +70,7 @@ public class Projectile {
             }
             y += vitesseY;
             r.setBounds(this.x, this.y, 10, 20);
+//            System.out.println("Proje Ennemie "+y);
         }
     }
 

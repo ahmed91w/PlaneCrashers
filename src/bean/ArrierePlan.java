@@ -7,10 +7,6 @@ package bean;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jetGame.StartingClass;
 
 /**
@@ -27,7 +23,7 @@ public class ArrierePlan {
     public ArrierePlan(int x, int y) {
         this.bgX = x;
         this.bgY = y;
-        this.vitesseY = -StartingClass.partie.getNiveau();
+        this.vitesseY = -StartingClass.partie.getNiveau()-1;
         background = toolkit.getImage("src/res/warshipsBackground-Récupéré.jpg");
     }
 

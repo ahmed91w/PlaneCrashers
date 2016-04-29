@@ -12,7 +12,7 @@ import java.awt.Toolkit;
 import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import jetGame.StartingClass;
-import service.MediaPlayer;
+
 
 /**
  *
@@ -186,7 +186,7 @@ public class Avion {
 
     public void destroy() {
         toucher();
-        MediaPlayer.playSound("/sound/Explosion.wav");
+        //MediaPlayer.playSound("/res/sound/Explosion.wav");
         drawingimage = toolkit.getImage("src/res/explode.gif");
     }
 

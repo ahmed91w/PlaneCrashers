@@ -5,14 +5,19 @@
  */
 package bean;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Label;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jetGame.StartingClass;
+import static jetGame.StartingClass.partie;
 
 /**
  *
@@ -26,15 +31,20 @@ public class BossEnnemi extends Ennemi implements Runnable {
 
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
 
+    private Thread move;
+
+    private Image healtBarEmpty;
+    
     public BossEnnemi() {
-        maxHealth = 20;
+        move = new Thread(this, "Boss Thread");
+        maxHealth = 50;
         currentHealth = maxHealth;
-        vitesse = -(StartingClass.partie.getNiveau() + 2);
+        vitesse = -(StartingClass.partie.getNiveau());
         setCenterX(600);
-        setCenterY(0);
+        setCenterY(-250);
         getR().setBounds(this.getCenterX(), this.getCenterY(), 150, 80);
         setImage(toolkit.getImage("src/res/Boss B-3.mini.png"));
-
+        healtBarEmpty = toolkit.getImage("src/res/BossHealthBarEmpty.png");
     }
 
     @Override
@@ -47,30 +57,28 @@ public class BossEnnemi extends Ennemi implements Runnable {
 
     @Override
     public void update() {
-        
-        if (currentHealth == 0) {
-            destroy();
-        } else {
-            
-            if (vitesse > 0) {
-                if (this.getCenterX() <= 1200) {
-                    this.setCenterX(this.getCenterX() + vitesse);
-                }
-
-            } else if (vitesse < 0) {
-                if (this.getCenterX() >= 10) {
-                    this.setCenterX(this.getCenterX() + vitesse);
-                }
+        if (vitesse > 0) {
+            if (this.getCenterX() < 1200) {
+                this.setCenterX(this.getCenterX() + vitesse);
             }
-            this.getR().setBounds(this.getCenterX(), this.getCenterY(), 130, 240);
 
-            for (int i = 0; i < StartingClass.avion.projectiles.size(); i++) {
-                if (checkCollision(StartingClass.avion.projectiles.get(i).getR())) {
-                    StartingClass.avion.projectiles.remove(i);
+        } else if (vitesse < 0) {
+            if (this.getCenterX() > 10) {
+                this.setCenterX(this.getCenterX() + vitesse);
+            }
+        }
+        this.getR().setBounds(this.getCenterX(), this.getCenterY(), 130, 240);
+//        follow();
+        for (int i = 0; i < StartingClass.avion.projectiles.size(); i++) {
+            if (checkCollision(StartingClass.avion.projectiles.get(i).getR())) {
+                StartingClass.avion.projectiles.remove(i);
+                if (currentHealth > 1) {
                     currentHealth--;
+
                 }
 
             }
+
         }
 
     }
@@ -78,13 +86,15 @@ public class BossEnnemi extends Ennemi implements Runnable {
     @Override
     public void follow() {
 
-        if (this.getCenterX() < StartingClass.avion.getCenterX()) {
-            vitesse = (StartingClass.partie.getNiveau() + 2);
-        } else if (this.getCenterX() > StartingClass.avion.getCenterX()) {
-            vitesse = -(StartingClass.partie.getNiveau() + 2);
-        } else if (this.getCenterX() == StartingClass.avion.getCenterX()) {
+        if (this.getCenterX() < (StartingClass.avion.getCenterX() + 30)) {
+            vitesse = (StartingClass.partie.getNiveau());
+        }
+        if (this.getCenterX() > (StartingClass.avion.getCenterX() - 30)) {
+            vitesse = -(StartingClass.partie.getNiveau());
+        }
+        if (this.getCenterX() == (StartingClass.avion.getCenterX() - 30)) {
             vitesse = 0;
-            this.setCenterX(StartingClass.avion.getCenterX() - 10);
+            this.setCenterX(StartingClass.avion.getCenterX() - 30);
         }
     }
 
@@ -114,21 +124,37 @@ public class BossEnnemi extends Ennemi implements Runnable {
 
     @Override
     public void run() {
-        while (currentHealth != 0) {
-
-//            this.shootMal();
-            if (this.getCenterX() >= 1200) {
-                vitesse = -(StartingClass.partie.getNiveau() + 2);
-            } else if (this.getCenterX() <= 10) {
-                vitesse = (StartingClass.partie.getNiveau() + 2);
-            }
-//            update();
+        while (this.getCenterY() <= 5) {
+            System.out.println("Boss moving down at " + getCenterY());
+            setCenterY(getCenterY() + 7);
+            vitesse = 0;
             try {
-                Thread.sleep(2000);
+                Thread.sleep(100);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
         }
+        vitesse = -(StartingClass.partie.getNiveau());
+        while (currentHealth > 1) {
+            System.out.println("Boss Health " + currentHealth);
+            if (projectiles.size() <= 1) {
+                this.shootMal();
+            }
+
+            if (this.getCenterX() >= 1200) {
+                vitesse = -(StartingClass.partie.getNiveau());
+            } else if (this.getCenterX() <= 10) {
+                vitesse = (StartingClass.partie.getNiveau());
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        destroy();
 
     }
 
@@ -152,7 +178,6 @@ public class BossEnnemi extends Ennemi implements Runnable {
         for (int i = 0; i < projectiles.size(); i++) {
             if (projectiles.get(i).getY() <= 700) {
                 projectiles.remove(i);
-
             }
 
         }
@@ -160,11 +185,21 @@ public class BossEnnemi extends Ennemi implements Runnable {
     }
 
     public void destroy() {
+        synchronized (this) {
 
-        setImage(toolkit.getImage("src/res/explod.gif"));
+            setImage(toolkit.getImage("src/res/explod.gif"));
+            //MediaPlayer.playSound("/res/sound/Explosion.wav");
+            if (currentHealth == 0) {
+                this.setCenterY(this.getCenterY() - 2);
+            }
+            try {
+                wait(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BossEnnemi.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            currentHealth--;
+            move.stop();
 
-        if (currentHealth == 0) {
-            this.setCenterY(this.getCenterY() - 2);
         }
 
     }
@@ -176,5 +211,41 @@ public class BossEnnemi extends Ennemi implements Runnable {
             }
         }
 
+    }
+
+    public int getVitesse() {
+        return vitesse;
+    }
+
+    public void setVitesse(int vitesse) {
+        this.vitesse = vitesse;
+    }
+
+    public Thread getMove() {
+        return move;
+    }
+
+    public void setMove(Thread move) {
+        this.move = move;
+    }
+
+    public void startMove() {
+        if (move.isAlive() == false) {
+            move.start();
+        }
+
+    }
+
+    public void stopMove() {
+        move.stop();
+    }
+
+    public void drawBossHealth(Graphics g, ImageObserver im) {
+        g.drawImage(healtBarEmpty, 1060, 600, im);
+        int distance = 0;   
+        for (int i = 0; i < currentHealth; i++) {
+            g.drawImage(toolkit.getImage("src/res/health_" + i + ".gif"), 1065 + distance, 600, im);
+            distance = distance + 5;
+        }
     }
 }
