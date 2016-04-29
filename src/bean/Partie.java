@@ -16,16 +16,17 @@ public class Partie {
     private String avion;
     private Integer niveau;
     private BossEnnemi boss;
-    public static int score=990;
+    public static boolean audio;
+    public static int score = 0;
 
     public Partie() {
     }
 
-    
-    public Partie(String joueur, String avion, Integer niveau) {
-        this.joueur .setNom(joueur);
+    public Partie(String joueur, String avion, Integer niveau, boolean audio) {
+        this.joueur.setNom(joueur);
         this.avion = avion;
         this.niveau = niveau;
+        this.audio = audio;
         //this.score = 0;
     }
 
@@ -36,8 +37,6 @@ public class Partie {
     public void setJoueur(Joueur joueur) {
         this.joueur = joueur;
     }
-
-    
 
     public String getAvion() {
         return avion;

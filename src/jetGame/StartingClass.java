@@ -56,7 +56,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     public static Thread attackThread;
 
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
-    
+
     Font f;
     Label label2;
     Label label1;
@@ -117,7 +117,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         } catch (IOException ex) {
             Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         initImages();
         partie = (Partie) Session.getAttributes("partie");
 
@@ -128,18 +128,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         label1.setBounds(1270, 108, 10, 10);
         label2 = new Label();
         label2.setBounds(1070, 108, 10, 10);
-        Font f = new Font("Arial", Font.BOLD, 12);
-        Font f1 = new Font("Arial", Font.BOLD, 12);
-        label.setFont(f);
-        label1.setFont(f1);
-        label2.setFont(f1);
-        Color c = new Color(0, 100, 186);
-        Color c1 = new Color(131, 28, 28);
-        label.setBackground(c);
+        label.setFont(new Font("Arial", Font.BOLD, 12));
+        label1.setFont(new Font("Arial", Font.BOLD, 12));
+        label2.setFont(new Font("Arial", Font.BOLD, 12));
+        label.setBackground(new Color(0, 100, 186));
         label1.setBackground(Color.WHITE);
         label2.setBackground(Color.WHITE);
-        label1.setForeground(c1);
-        label2.setForeground(c1);
+        label1.setForeground(new Color(131, 28, 28));
+        label2.setForeground(new Color(131, 28, 28));
         label.setText(partie.getJoueur().getNom());
         label1.setText("##");
         label2.setText(partie.getNiveau().toString());
@@ -187,35 +183,45 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
                 whileAvionIsAlive();
             } else {
+
                 gameOver();
 
             }
 
             try {
-                Thread.sleep(17);
+                Thread.sleep(15);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+//        synchronized (thread) {
+            try {
+                thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
+            }
+//        }
         //MediaPlayer.playSound("/res/sound/game_over.wav");
         bg1.setBackground(toolkit.getImage("src/res/gameoverbg.png"));
         bg1.setBgY(-1750);
         repaint();
-        int output = JOptionPane.showConfirmDialog(this, "Joueur : " + partie.getJoueur() + "\n Votre Score : " + partie.score + " \n ", "Fin de partie", JOptionPane.CLOSED_OPTION,
+        int choix = JOptionPane.showConfirmDialog(this, "Joueur : " + partie.getJoueur().getNom() + "\n Votre Score : " + partie.score + " \n ", "Fin de partie", JOptionPane.CLOSED_OPTION,
                 JOptionPane.CLOSED_OPTION);
-        if (output == JOptionPane.CLOSED_OPTION) {
+        if (choix == JOptionPane.CLOSED_OPTION) {
             System.exit(0);
         }
-        System.exit(0);
+//        System.exit(0);
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e
+    ) {
 
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e
+    ) {
         switch (e.getKeyCode()) { //if (e.getKeyCode()==KeyEvent.VK_UP)
             case KeyEvent.VK_UP:
                 avion.up();
@@ -241,7 +247,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e
+    ) {
         switch (e.getKeyCode()) { //if (e.getKeyCode()==KeyEvent.VK_UP)
             case KeyEvent.VK_UP:
                 avion.stop();
@@ -363,26 +370,27 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
     public void paint(Graphics g) {
-        
-        drawBackground(g);
 
+        drawBackground(g);
+        drawInfoBoard(g);
         drawNbrVie(g, vieOn, avion.vie);
 
         drawProjectilles(g);
 
-        drawEnnemis(g);
-
         drawAvion(g);
 
+        drawEnnemis(g);
+        drawShootEnnemie(g);
         if (bossEnnemi.getMove().isAlive() == true) {
             drawBossEnnemie(g);
         }
-
-        drawShootEnnemie(g);
         drawShield(g);
         powerUpGenerator.drawPowerUp(g, this);
-//        drawInfoBoard(g);
-//        g.drawImage(toolkit.getImage("src/res/levelCompleted.png"), 200, 200, this);
+
+//        if (partie.getNiveau() == 1 || partie.getNiveau() == 2 && partie.score >= 1000 && partie.score <= 1050) {
+//            g.drawImage(toolkit.getImage("src/res/levelCompleted.png"), 550, 200, this);
+//
+//        }
     }
 
     public void levelUp() {

@@ -28,7 +28,10 @@ public class Home extends javax.swing.JFrame {
         jButton1.setOpaque(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setBorderPainted(false);
-
+        jButton2.setOpaque(false);
+        jButton2.setContentAreaFilled(false);
+        jButton2.setBorderPainted(false);
+        
     }
 
     /**
@@ -41,7 +44,6 @@ public class Home extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -56,12 +58,6 @@ public class Home extends javax.swing.JFrame {
         jPanel1.setLayout(null);
         getContentPane().add(jPanel1);
         jPanel1.setBounds(1721, 0, 0, 675);
-
-        jLabel2.setFont(new java.awt.Font("Astron Boy Rg", 0, 48)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 51, 0));
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/logo2015.png"))); // NOI18N
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(360, 90, 310, 260);
 
         jButton1.setFont(new java.awt.Font("Astron Boy Video", 1, 24)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/StartButton.png"))); // NOI18N
@@ -88,11 +84,11 @@ public class Home extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton2);
-        jButton2.setBounds(471, 473, 70, 30);
+        jButton2.setBounds(450, 460, 150, 50);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/startingbg.jpg"))); // NOI18N
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 1074, 670);
+        jLabel1.setBounds(-60, -100, 1074, 670);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -162,7 +158,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
