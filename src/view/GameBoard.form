@@ -406,7 +406,7 @@
         </Component>
         <Component class="javax.swing.JToggleButton" name="jToggleButton1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Audio On/OFF"/>
+            <Property name="text" type="java.lang.String" value="SFX On/OFF"/>
           </Properties>
         </Component>
       </SubComponents>

@@ -216,7 +216,7 @@ public class GameBoard extends javax.swing.JFrame {
             }
         });
 
-        jToggleButton1.setText("Audio On/OFF");
+        jToggleButton1.setText("SFX On/OFF");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -535,7 +535,7 @@ public class GameBoard extends javax.swing.JFrame {
         Integer lvl = getSelectedLvl();
         String joueur = jTextField1.getText().toString();
 //        boolean audio=jToggleButton1;
-        Partie p = new Partie(joueur, avion, lvl);
+        Partie p = new Partie(joueur, avion, lvl, true);
         return p;
     }
 
