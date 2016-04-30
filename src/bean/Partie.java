@@ -16,7 +16,7 @@ public class Partie {
     private String avion;
     private Integer niveau;
     private BossEnnemi boss;
-    public static boolean audio;
+    public static boolean audio=false;
     public static int score = 0;
 
     public Partie() {
@@ -54,4 +54,21 @@ public class Partie {
         this.niveau = niveau;
     }
 
+    public BossEnnemi getBoss() {
+        return boss;
+    }
+
+    public void setBoss(BossEnnemi boss) {
+        this.boss = boss;
+    }
+
+    public static boolean isAudio() {
+        return audio;
+    }
+
+    public static void setAudio(boolean audio) {
+        Partie.audio = audio;
+    }
+
+    
 }

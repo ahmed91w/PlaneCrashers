@@ -466,15 +466,25 @@ public class GameBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jButton1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseEntered
-//        MediaPlayer.playSound("/sound/button_click.wav");
+
+        if (jToggleButton1.isSelected()) {
+            MediaPlayer.playSound("/res/sound/button_click.wav");
+        }
     }//GEN-LAST:event_jButton1MouseEntered
 
     private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseEntered
-//        MediaPlayer.playSound("/sound/button_click.wav");
+        if (jToggleButton1.isSelected()) {
+            MediaPlayer.playSound("/res/sound/button_click.wav");
+        }
+
     }//GEN-LAST:event_jButton2MouseEntered
 
     private void jRadioButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButton5MouseClicked
-//        MediaPlayer.playSound("/sound/Menu_Select_00.wav");
+        if (jToggleButton1.isSelected()) {
+            MediaPlayer.playSound("/res/sound/Menu_Select_00.wav");
+        }
+
+
     }//GEN-LAST:event_jRadioButton5MouseClicked
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -534,8 +544,9 @@ public class GameBoard extends javax.swing.JFrame {
         String avion = getSelectedAvion();
         Integer lvl = getSelectedLvl();
         String joueur = jTextField1.getText().toString();
-//        boolean audio=jToggleButton1;
-        Partie p = new Partie(joueur, avion, lvl, true);
+        boolean audio = jToggleButton1.isSelected();
+        System.out.println("etat " + audio);
+        Partie p = new Partie(joueur, avion, lvl, audio);
         return p;
     }
 
@@ -576,13 +587,13 @@ public class GameBoard extends javax.swing.JFrame {
         });
     }
 
-    public double tempsEcouler() {
-
-        long tEnd = System.currentTimeMillis();
-        long tDelta = tEnd - tStart;
-        double elapsedSeconds = tDelta / (60 * 1000.0);
-        return elapsedSeconds;
-    }
+//    public double tempsEcouler() {
+//
+//        long tEnd = System.currentTimeMillis();
+//        long tDelta = tEnd - tStart;
+//        double elapsedSeconds = tDelta / (60 * 1000.0);
+//        return elapsedSeconds;
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;

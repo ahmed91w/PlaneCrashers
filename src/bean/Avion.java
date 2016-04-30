@@ -5,14 +5,13 @@
  */
 package bean;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import jetGame.StartingClass;
-
+import static jetGame.StartingClass.partie;
+import service.MediaPlayer;
 
 /**
  *
@@ -150,14 +149,13 @@ public class Avion {
         this.bouclierImg = bouclierImg;
     }
 
-    
     public void shoot() {
         if (type == 4) {
             Projectile p1 = new Projectile(centerX + 65, centerY + 30, false);
             Projectile p2 = new Projectile(centerX + 10, centerY + 30, false);
             projectiles.add(p1);
             projectiles.add(p2);
-        } else if (type == 1 || type == 2 || type == 3) {
+        } else if (type == 1 || type == 2) {
             if (powerUpON != null) {
                 if (powerUpON.getType() == 2) {
                     Projectile p1 = new Projectile(centerX + 15, centerY + 20, false);
@@ -181,13 +179,42 @@ public class Avion {
                 projectiles.add(p);
             }
 
-        }
+        } else if (type == 3) {
+            if (powerUpON != null) {
+                if (powerUpON.getType() == 2) {
+                    Projectile p1 = new Projectile(centerX + 15, centerY + 20, false);
+                    Projectile p2 = new Projectile(centerX + 35, centerY + 20, false);
+                    projectiles.add(p1);
+                    projectiles.add(p2);
+                } else if (powerUpON.getType() == 3) {
+                    Projectile p1 = new Projectile(centerX, centerY - (width / 2), false);
+                    Projectile p2 = new Projectile(centerX + (height / 2), centerY - 10, false);
+                    Projectile p3 = new Projectile(centerX + height, centerY - (width / 2), false);
+                    projectiles.add(p1);
+                    projectiles.add(p2);
+                    projectiles.add(p3);
+                } else {
+                    Projectile p1 = new Projectile(centerX + 24, centerY - 40, false);
+                    Projectile p2 = new Projectile(centerX + 24, centerY - 10, false);
+                    projectiles.add(p1);
+                    projectiles.add(p2);
+                }
 
+            } else {
+                Projectile p1 = new Projectile(centerX + 24, centerY - 40, false);
+                Projectile p2 = new Projectile(centerX + 24, centerY - 10, false);
+                projectiles.add(p1);
+                projectiles.add(p2);
+            }
+
+        }
     }
 
     public void destroy() {
         toucher();
-        //MediaPlayer.playSound("/res/sound/Explosion.wav");
+        if (StartingClass.partie.audio) {
+            MediaPlayer.playSound("/res/sound/Explosion.wav");
+        }
         drawingimage = toolkit.getImage("src/res/explode.gif");
     }
 

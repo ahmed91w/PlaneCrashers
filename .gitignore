@@ -1,1 +1,8 @@
 /dist/
+/build/
+/test/
+/build.xml
+/manifest.mf
+/master-applet.JNLP
+/nbproject
+/preview-applet.html

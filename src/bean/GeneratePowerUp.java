@@ -50,7 +50,9 @@ public class GeneratePowerUp implements Runnable {
             p.getMove().start();
             powerUps.add(p);
             System.out.println("Power Up added");
-//            MediaPlayer.playSound("/res/sound/power_up.wav");
+            if (StartingClass.partie.audio) {
+            MediaPlayer.playSound("/res/sound/power_up.wav");
+            }
             try {
 //                sleep(120000);
                 sleep(60000);

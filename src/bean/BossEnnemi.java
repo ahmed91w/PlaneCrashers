@@ -5,10 +5,8 @@
  */
 package bean;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Label;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.image.ImageObserver;
@@ -17,7 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jetGame.StartingClass;
-import static jetGame.StartingClass.partie;
+import service.MediaPlayer;
 
 /**
  *
@@ -189,7 +187,9 @@ public class BossEnnemi extends Ennemi implements Runnable {
         synchronized (this) {
 
             setImage(toolkit.getImage("src/res/explod.gif"));
-            //MediaPlayer.playSound("/res/sound/Explosion.wav");
+            if (StartingClass.partie.audio) {
+            MediaPlayer.playSound("/res/sound/Explosion.wav");
+            }
             if (currentHealth == 0) {
                 this.setCenterY(this.getCenterY() - 2);
             }

@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jetGame.StartingClass;
+import service.MediaPlayer;
 
 
 /**
@@ -60,7 +61,9 @@ public class PowerUp implements Runnable {
         vitesseY = -5;
         r.setBounds(x, y, hauteur, largeur);
         if (r.intersects(StartingClass.avion.getR())) {
-            //MediaPlayer.playSound("/res/sound/missile_level_up.wav");
+            if (StartingClass.partie.audio) {
+            MediaPlayer.playSound("/res/sound/missile_level_up.wav");
+            }
             GeneratePowerUp.powerUps.remove(this);
 //            System.out.println("Greate you have eat this powerUps");
             eated = true;

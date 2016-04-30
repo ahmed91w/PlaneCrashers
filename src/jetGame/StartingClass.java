@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import service.MediaPlayer;
 
 /**
  *
@@ -167,9 +168,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
         powerUpGenerator = new GeneratePowerUp();
         powerUpGenerator.startGeneration();
-//        MediaPlayer.playBgSound("/res/sound/Music-loop-electronic.wav");
+        if (partie.audio) {
+            MediaPlayer.playBgSound("/res/sound/Music-loop-electronic.wav");
+        }
+        
 
-//        bossEnnemi.startMove();
     }
 
     @Override
@@ -177,7 +180,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
         //rafraichire l ecrant tant que l'avion et en vie
 //les modifications des x,y se fait ici;
-//mise ajour la position de l'avion
+
         while (avion.vie != 0) {
             if (avion.vie != 0) {
 
@@ -194,14 +197,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 e.printStackTrace();
             }
         }
-//        synchronized (thread) {
-            try {
-                thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
-            }
-//        }
-        //MediaPlayer.playSound("/res/sound/game_over.wav");
+
+        try {
+            thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(StartingClass.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (partie.audio) {
+            MediaPlayer.playSound("/res/sound/game_over.wav");
+        }
+
         bg1.setBackground(toolkit.getImage("src/res/gameoverbg.png"));
         bg1.setBgY(-1750);
         repaint();
@@ -210,7 +215,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         if (choix == JOptionPane.CLOSED_OPTION) {
             System.exit(0);
         }
-//        System.exit(0);
+        System.exit(0);
     }
 
     @Override
@@ -271,7 +276,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             case KeyEvent.VK_SPACE:
                 if (avion.vie != 0) {
                     avion.shoot();
-//                    MediaPlayer.playSound("/res/sound/weapon_player.wav");
+                    if (partie.audio) {
+                    MediaPlayer.playSound("/res/sound/weapon_player.wav");
+                    }
                 }
                 break;
 
