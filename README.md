@@ -10,5 +10,5 @@
 ![play2](https://cloud.githubusercontent.com/assets/7659573/19211993/bc44f74c-8d40-11e6-9678-e005135ef825.png)
 ###Boss
 ![boss](https://cloud.githubusercontent.com/assets/7659573/19211994/bc45912a-8d40-11e6-9882-a9975a08cad2.png)
-###Other Screen
+###Power Ups
 ![gameover](https://cloud.githubusercontent.com/assets/7659573/19211996/c3f59168-8d40-11e6-8e9e-e673b6f1783e.png)
