@@ -6,7 +6,7 @@
 ![home](https://cloud.githubusercontent.com/assets/7659573/19211975/9c02aace-8d40-11e6-8728-263cfd37a051.png)
 ###Level One
 ![play1](https://cloud.githubusercontent.com/assets/7659573/19211992/bc40f66a-8d40-11e6-997b-e1fa5bcf831a.png)
-###Sample SceenShot
+###Sample ScreenShot
 ![play2](https://cloud.githubusercontent.com/assets/7659573/19211993/bc44f74c-8d40-11e6-9678-e005135ef825.png)
 ###Boss
 ![boss](https://cloud.githubusercontent.com/assets/7659573/19211994/bc45912a-8d40-11e6-9882-a9975a08cad2.png)
