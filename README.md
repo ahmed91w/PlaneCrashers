@@ -1,6 +1,6 @@
 # Plane Crashers
 
-##What is JeuAvion?
+##What is Plane Crashers?
 2D games warplane develop in Java or you can choose from different aircraft from all generations. Use your keyboard to release missiles, drawing ultra-powerful blows and annihilate your opponents. fighting Boss level's and get helped by a lot of Power-Ups
 ###Home View
 ![home](https://cloud.githubusercontent.com/assets/7659573/19211975/9c02aace-8d40-11e6-8728-263cfd37a051.png)
