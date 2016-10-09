@@ -18,9 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import jetGame.StartingClass;
-import service.JoueurService;
 import service.MediaPlayer;
-import service.PartieService;
 import service.Session;
 
 /**
@@ -31,8 +29,7 @@ import service.Session;
 public class GameBoard extends javax.swing.JFrame {
 
     static long tStart;
-    PartieService partieService = new PartieService();
-    JoueurService joueurService = new JoueurService();
+
 
     /**
      * Creates new form Login
@@ -40,17 +37,13 @@ public class GameBoard extends javax.swing.JFrame {
     public GameBoard() {
 
         initComponents();
-        iniCombobox();
+//        iniCombobox();
 
     }
 
     public void iniCombobox() {
         List<Joueur> joueurs = new ArrayList<>();
-        try {
-            joueurs = joueurService.findAll();
-        } catch (SQLException ex) {
-            Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         if (joueurs != null) {
             for (Joueur joueur : joueurs) {
                 jComboBox1.addItem(joueur.getNom());
@@ -396,26 +389,27 @@ public class GameBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            Joueur joueur = new Joueur();
+//        try {
+            Joueur joueur = new Joueur("ahmed");
             Partie p = getParams();
-            joueur.setNom(jTextField1.getText());
-            List<Joueur> joueurs = joueurService.findAll();
-            if (joueurs != null) {
-                int flag = 0;
-                for (Joueur joueur1 : joueurs) {
-                    if (joueur1.getNom().equals(joueur.getNom())) {
-                        int res = partieService.create(p);
-                        if (res > 0) {
-                            flag++;
-                        }
-                    }
-                }
-                if (flag != 1) {
-                    partieService.create(p);
-                    joueurService.create(joueur);
-                }
-            }
+            p.setJoueur(joueur);
+          
+//            List<Joueur> joueurs = joueurService.findAll();
+//            if (joueurs != null) {
+//                int flag = 0;
+//                for (Joueur joueur1 : joueurs) {
+//                    if (joueur1.getNom().equals(joueur.getNom())) {
+//                        int res = partieService.create(p);
+//                        if (res > 0) {
+//                            flag++;
+//                        }
+//                    }
+//                }
+//                if (flag != 1) {
+//                    partieService.create(p);
+//                    joueurService.create(joueur);
+//                }
+//            }
             Session.setAttributes(p, "partie");
             final JFrame frame = new JFrame("Java OpenStreetMap Editor");
             StartingClass sc = new StartingClass();
@@ -455,9 +449,9 @@ public class GameBoard extends javax.swing.JFrame {
             sc.start();
             add(sc);
             remove(jPanel1);
-        } catch (SQLException ex) {
-            Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(GameBoard.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
